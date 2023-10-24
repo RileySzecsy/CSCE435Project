@@ -22,20 +22,20 @@ Comparing the performance of comparision based sorting algorithms.
 - Odd-Even Transposition Sort (MPI + CUDA)
   -  MPI on each core
   -  Presudocode:
-    **procedure** ODD-EVEN PAR(n)
-    **begin**
-      id := proccees's label
-      **for** i := 1 to n **do**
-      **begin**
-         **if** i is odd **then**
-            *compare-exchange min (id+1);*
-         **else**
-             *compare-exchange max(id-1);*
-       **if** i is even **then**
-           **if** id is even **then**
-               *compare-exchange min(id+1);*
-           **else**
-               *compare-exhange max(id-1);*
-       **end for**
-     **end** ODD-EVEN PAR
+    **procedure** ODD-EVEN PAR(n) <br>
+    **begin** <br>
+      id := proccees's label <br>
+      **for** i := 1 to n **do** <br>
+      **begin** <br>
+         **if** i is odd **then** <br>
+            *compare-exchange min (id+1);* <br>
+         **else** <br>
+             *compare-exchange max(id-1);* <br>
+       **if** i is even **then** <br>
+           **if** id is even **then** <br>
+               *compare-exchange min(id+1);* <br>
+           **else** <br>
+               *compare-exhange max(id-1);* <br>
+       **end for** <br>
+     **end** ODD-EVEN PAR <br>
        
