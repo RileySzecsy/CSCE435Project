@@ -4,7 +4,7 @@
 1. Riley Szecsy
 2. Vincent Lobello
 3. Jonathan Kutsch
-4. Nebiyou Ersabo
+4. Nebiyou Ersabo <br>
 Group is communicating over groupme. 
 ---
 
@@ -21,21 +21,22 @@ Comparing the performance of comparision based sorting algorithms.
   -  Pesudocode:
 - Odd-Even Transposition Sort (MPI + CUDA)
   -  MPI on each core
-  -  Presudocode:
+  -  Presudocode: <br>
     **procedure** ODD-EVEN PAR(n) <br>
     **begin** <br>
-      id := proccees's label <br>
-      **for** i := 1 to n **do** <br>
-      **begin** <br>
-         **if** i is odd **then** <br>
-            *compare-exchange min (id+1);* <br>
-         **else** <br>
-             *compare-exchange max(id-1);* <br>
-       **if** i is even **then** <br>
-           **if** id is even **then** <br>
-               *compare-exchange min(id+1);* <br>
-           **else** <br>
-               *compare-exhange max(id-1);* <br>
-       **end for** <br>
+      &emsp; id := proccees's label <br>
+      &emsp; **for** i := 1 to n **do** <br>
+      &emsp; **begin** <br>
+      &emsp;&emsp; **if** i is odd **then** <br>
+      &emsp;&emsp;&emsp;**if** id is odd **then** <br>
+      &emsp;&emsp;&emsp;&emsp;*compare-exchange min (id+1);* <br>
+      &emsp;&emsp;&emsp;**else** <br>
+      &emsp;&emsp;&emsp;*compare-exchange max(id-1);* <br>
+      &emsp;&emsp;**if** i is even **then** <br>
+      &emsp;&emsp;&emsp;**if** id is even **then** <br>
+      &emsp;&emsp;&emsp;&emsp;*compare-exchange min(id+1);* <br>
+      &emsp;&emsp;&emsp;**else** <br>
+      &emsp;&emsp;&emsp;&emsp;*compare-exhange max(id-1);* <br>
+       &emsp;**end for** <br>
      **end** ODD-EVEN PAR <br>
        
