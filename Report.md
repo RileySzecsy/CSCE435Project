@@ -9,7 +9,7 @@ Group is communicating over groupme.
 ---
 
 ## 2. _due 10/25_ Project topic
-Comparing the performance of comparision based sorting algorithms. 
+Comparing the performance of comparision based sorting algorithms. We will be scaling the GPU settings and change the number of threads and proccessors of the CPU based on problem size. We will be testing these on sorted, random, and reverse sorted inputs.  
 
 ## 2. _due 10/25_ Brief project description (what algorithms will you be comparing and on what architectures)
 
@@ -56,4 +56,3 @@ Comparing the performance of comparision based sorting algorithms.
       &emsp;&emsp;&emsp;&emsp;*compare-exhange max(id-1);* <br>
        &emsp;**end for** <br>
      **end** ODD-EVEN PAR <br>
-       
