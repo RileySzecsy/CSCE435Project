@@ -15,7 +15,24 @@ Comparing the performance of comparision based sorting algorithms.
 
 - Quicksort (MPI + CUDA)
   -  MPI on each core
-  -  Pesudocode:
+  -  Pesudocode: <br>
+  procedure QUICKSORT (A, q, r )
+  **begin**<br>
+  &emsp;**if** g < r **then**<br>
+  &emsp;&emsp;**begin**<br>
+  &emsp;&emsp;X:= A[q];<br>
+  &emsp;&emsp;S:= q;<br>
+  &emsp;&emsp;**for** i:=q+1 to r **do**:<br>
+  &emsp;&emsp;&emsp;if A[i] <= x then <br>
+  &emsp;&emsp;&emsp;**begin** <br>
+  &emsp;&emsp;&emsp;&emsp;s:=s+1;<br>
+  &emsp;&emsp;&emsp;&emsp;swap(A[s], A[i]);<br>
+  &emsp;&emsp;&emsp;**end if** <br>
+  &emsp;&emsp;swap(A[q], A[s]); <br>
+  &emsp;&emsp;QUICKSORT (A, q, s); <br>
+  &emsp;&emsp;QUICKSORT (A, s + 1, r ); <br>
+  &emsp;**end if** <br>
+  **end** QUICKSORT <br>
 - Mergesort (MPI + CUDA)
   -  MPI on each core
   -  Pesudocode:
