@@ -36,6 +36,41 @@ Comparing the performance of comparision based sorting algorithms. We will be sc
 - Mergesort (MPI + CUDA)
   -  MPI on each core
   -  Pesudocode:
+```
+function parallel_merge_sort(arr):
+    if length(arr) <= 1:
+        return arr
+    
+    middle = length(arr) / 2
+    left_half = arr[0:middle]
+    right_half = arr[middle:]
+
+    left_sorted = parallel_merge_sort(left_half)
+    right_sorted = parallel_merge_sort(right_half)
+
+    result = parallel_merge(left_sorted, right_sorted)
+
+    return result
+
+function parallel_merge(left, right):
+    result = []
+    left_index = 0
+    right_index = 0
+    while left_index < length(left) and right_index < length(right):
+        if left[left_index] < right[right_index]:
+            result.append(left[left_index])
+            left_index++
+        else:
+            result.append(right[right_index])
+            right_index++
+    while left_index < length(left):
+        result.append(left[left_index])
+        left_index++
+    while right_index < length(right):
+        result.append(right[right_index])
+        right_index++
+    return result
+```
 - Odd-Even Transposition Sort (MPI + CUDA)
   -  MPI on each core
   -  Presudocode: <br>
