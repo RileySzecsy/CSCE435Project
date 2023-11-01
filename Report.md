@@ -16,28 +16,33 @@ Comparing the performance of comparision based sorting algorithms. We will be sc
 - Quicksort (MPI + CUDA)
   -  MPI on each core
   -  Pesudocode: <br>
+  ```
   procedure QUICKSORT (A, q, r )
-  **begin**<br>
-  &emsp;**if** g < r **then**<br>
-  &emsp;&emsp;**begin**<br>
-  &emsp;&emsp;X:= A[q];<br>
-  &emsp;&emsp;S:= q;<br>
-  &emsp;&emsp;**for** i:=q+1 to r **do**:<br>
-  &emsp;&emsp;&emsp;if A[i] <= x then <br>
-  &emsp;&emsp;&emsp;**begin** <br>
-  &emsp;&emsp;&emsp;&emsp;s:=s+1;<br>
-  &emsp;&emsp;&emsp;&emsp;swap(A[s], A[i]);<br>
-  &emsp;&emsp;&emsp;**end if** <br>
-  &emsp;&emsp;swap(A[q], A[s]); <br>
-  &emsp;&emsp;QUICKSORT (A, q, s); <br>
-  &emsp;&emsp;QUICKSORT (A, s + 1, r ); <br>
-  &emsp;**end if** <br>
-  **end** QUICKSORT <br>
+  begin
+    if g < r then
+      begin
+        X:= A[q];
+        S:= q;<br>
+        for i:=q+1 to r do:
+          if A[i] <= x then
+          begin
+            s:=s+1
+            swap(A[s], A[i]);
+          end if
+      swap(A[q], A[s]);
+      QUICKSORT (A, q, s)
+      QUICKSORT (A, s + 1, r )
+      end if
+  end QUICKSORTlp
+```
+```
+
 - Mergesort (MPI + CUDA)
   -  MPI on each core
   -  Pesudocode:
-```
-function parallel_merge_sort(arr):
+  
+  ```
+  function parallel_merge_sort(arr):
     if length(arr) <= 1:
         return arr
     
@@ -52,7 +57,7 @@ function parallel_merge_sort(arr):
 
     return result
 
-function parallel_merge(left, right):
+  function parallel_merge(left, right):
     result = []
     left_index = 0
     right_index = 0
@@ -70,24 +75,29 @@ function parallel_merge(left, right):
         result.append(right[right_index])
         right_index++
     return result
-```
+  
+  ```
+
+
 - Odd-Even Transposition Sort (MPI + CUDA)
   -  MPI on each core
   -  Presudocode: <br>
-    **procedure** ODD-EVEN PAR(n) <br>
-    **begin** <br>
-      &emsp; id := proccees's label <br>
-      &emsp; **for** i := 1 to n **do** <br>
-      &emsp; **begin** <br>
-      &emsp;&emsp; **if** i is odd **then** <br>
-      &emsp;&emsp;&emsp;**if** id is odd **then** <br>
-      &emsp;&emsp;&emsp;&emsp;*compare-exchange min (id+1);* <br>
-      &emsp;&emsp;&emsp;**else** <br>
-      &emsp;&emsp;&emsp;*compare-exchange max(id-1);* <br>
-      &emsp;&emsp;**if** i is even **then** <br>
-      &emsp;&emsp;&emsp;**if** id is even **then** <br>
-      &emsp;&emsp;&emsp;&emsp;*compare-exchange min(id+1);* <br>
-      &emsp;&emsp;&emsp;**else** <br>
-      &emsp;&emsp;&emsp;&emsp;*compare-exhange max(id-1);* <br>
-       &emsp;**end for** <br>
-     **end** ODD-EVEN PAR <br>
+  ```
+    procedure ODD-EVEN PAR(n)
+    begin
+      id := proccees's label
+      for i := 1 to n do
+      begin
+        if i is odd then
+          if id is odd then
+           compare-exchange min (id+1);
+          else
+            compare-exchange max(id-1);
+          if i is even then
+            if id is even then
+              compare-exchange min(id+1);
+            else
+              compare-exhange max(id-1);
+        end for
+     end ODD-EVEN PAR
+```
