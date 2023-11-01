@@ -81,7 +81,7 @@ Comparing the performance of comparision based sorting algorithms. We will be sc
 
 - Odd-Even Transposition Sort (MPI + CUDA)
   -  MPI on each core
-  -  Presudocode: <br>
+  -  Pesudocode: <br>
   ```
     procedure ODD-EVEN PAR(n)
     begin
@@ -101,3 +101,24 @@ Comparing the performance of comparision based sorting algorithms. We will be sc
         end for
      end ODD-EVEN PAR
 ```
+```
+
+- Shell Sort (MPI + CUDA)
+  - MPI on each core
+  - Pesudocode provided by University at Buffalo: <br>
+[  https://cse.buffalo.edu/faculty/miller/Courses/CSE633/prasad-salvi-      Spring-2017-CSE633.pdf ](https://cse.buffalo.edu/faculty/miller/Courses/CSE633/prasad-salvi-Spring-2017-CSE633.pdf)
+    
+  ```
+    procedure SHELL SORT(Data,N,h,P)
+      Initalize Data of size N elements and interval value h on P0
+      Broadcast(MPI_Scatter) data elements across P Proccessors
+      In parallel preform Shell Sort on P processor
+        Divide data into virtual sub-lists of elements h interval apart
+        Perform insertion sort on these smaller sublists
+        Decrement the interval h
+        Repeat until h = 1 and Data is sorted for each P
+    For 2^i where i = 0,1,2,...,2^i = P, Merge the data across P_i & P_i+1
+    using merge sort operation in parallel til entire list is sorted
+  ```
+
+  
