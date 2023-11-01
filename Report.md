@@ -9,31 +9,16 @@ Group is communicating over groupme.
 ---
 
 ## 2. _due 10/25_ Project topic
-Comparing the performance of comparision based sorting algorithms. We will be scaling the GPU settings and change the number of threads and proccessors of the CPU based on problem size. We will be testing these on sorted, random, and reverse sorted inputs.  
+Comparing the performance of comparision based sorting algorithms. We will be scaling the GPU settings and change the number of threads and proccessors of the CPU based on problem size. We will be testing these on sorted, random, and reverse sorted inputs. 
+For Radix sort we will be comparing it directly to sample sort as we can only test integers. 
 
 ## 2. _due 10/25_ Brief project description (what algorithms will you be comparing and on what architectures)
 
-- Quicksort (MPI + CUDA)
+- Sample Sort (MPI + CUDA)
   -  MPI on each core
   -  Pesudocode: <br>
   ```
-  procedure QUICKSORT (A, q, r )
-  begin
-    if g < r then
-      begin
-        X:= A[q];
-        S:= q;<br>
-        for i:=q+1 to r do:
-          if A[i] <= x then
-          begin
-            s:=s+1
-            swap(A[s], A[i]);
-          end if
-      swap(A[q], A[s]);
-      QUICKSORT (A, q, s)
-      QUICKSORT (A, s + 1, r )
-      end if
-  end QUICKSORTlp
+
 ```
 ```
 
@@ -103,22 +88,12 @@ Comparing the performance of comparision based sorting algorithms. We will be sc
 ```
 ```
 
-- Shell Sort (MPI + CUDA)
+- Radix Sort (MPI + CUDA)
   - MPI on each core
-  - Pesudocode provided by University at Buffalo: <br>
-[  https://cse.buffalo.edu/faculty/miller/Courses/CSE633/prasad-salvi-      Spring-2017-CSE633.pdf ](https://cse.buffalo.edu/faculty/miller/Courses/CSE633/prasad-salvi-Spring-2017-CSE633.pdf)
+  - Pesudocode 
     
   ```
-    procedure SHELL SORT(Data,N,h,P)
-      Initalize Data of size N elements and interval value h on P0
-      Broadcast(MPI_Scatter) data elements across P Proccessors
-      In parallel preform Shell Sort on P processor
-        Divide data into virtual sub-lists of elements h interval apart
-        Perform insertion sort on these smaller sublists
-        Decrement the interval h
-        Repeat until h = 1 and Data is sorted for each P
-    For 2^i where i = 0,1,2,...,2^i = P, Merge the data across P_i & P_i+1
-    using merge sort operation in parallel til entire list is sorted
+
   ```
 
   
