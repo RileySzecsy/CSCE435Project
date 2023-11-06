@@ -1,0 +1,8 @@
+Initial array: 
+879 71 380 475 38 437 133 258 668 624 572 798 
+
+Sorted array: 
+38 71 133 258 380 437 475 572 624 668 798 879 
+
+The array is sorted from least to greatest
+Elapsed time = 1.492940e-01 seconds
