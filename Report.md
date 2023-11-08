@@ -96,4 +96,4 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
   ```
 
-  
+  ## For the report need to have pesudo code, describe the algorithms if we dont have both cuda and mpi implementations then we just either describe where we are stuck or try and explain why it may not be possible
