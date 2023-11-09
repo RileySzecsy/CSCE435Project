@@ -97,14 +97,46 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
         end for
      end ODD-EVEN PAR
 ```
-```
 
 - Radix Sort (MPI + CUDA)
   - MPI on each core
-  - Pesudocode 
+  - Pesudocode <br>
     
   ```
-
+  procedure RadixSort(arr, n)
+  begin
+      id := process's label
+      for exp := 1 to maximum_digit_position do
+      begin
+          if exp is odd then
+              if id is odd then
+                  CompareExchangeMin(id + 1)
+              else
+                  CompareExchangeMax(id - 1)
+          end if
+          if exp is even then
+              if id is even then
+                  CompareExchangeMin(id + 1)
+              else
+                  CompareExchangeMax(id - 1)
+          end if
+          Call CountSort(arr, n, exp)
+      end for
+  end RadixSort
+  
+  procedure CountSort(arr, n, exp)
+  begin
+      Create an output array of size n
+      Create a count array of size 10 and initialize to 0
+      for i := 0 to n - 1 do
+          count[(arr[i] / exp) % 10]++
+      for i := 1 to 9 do
+          count[i] += count[i - 1]
+      for i := n - 1 down to 0 do
+          output[count[(arr[i] / exp) % 10] - 1] := arr[i]
+          Decrement count[(arr[i] / exp) % 10]
+      Copy the output array to arr
+  end CountSort
   ```
 ### 2b. Pseudocode for each parallel algorithm
 - For MPI programs, include MPI calls you will use to coordinate between processes
