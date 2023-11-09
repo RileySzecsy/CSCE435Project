@@ -119,12 +119,12 @@ by the pivots.
 - Weak scaling
 
 
-  ## For the report need to have pesudo code, describe the algorithms if we dont have both cuda and mpi implementations then we just either describe where we are stuck or try and explain why it may not be possible
-
 ## 3. Project implementation
 - Sample Sort:
 - Mergesort:
 - Odd-Even Transposition Sort:
+  - MPI: MPI_Recv
+  - Cuda: Explaination on why you cant do it or why its not possible
 - Radix Sort:
 
 
