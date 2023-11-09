@@ -101,10 +101,9 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   and where you will transfer data to/from GPU
 
 ### 2c. Evaluation plan - what and how will you measure and compare
-- Input sizes, Input types
-- Strong scaling (same problem size, increase number of processors/nodes)
-- Weak scaling (increase problem size, increase number of processors)
-- Number of threads in a block on the GPU 
+- Random inputs
+- Strong scaling
+- Weak scaling
 
 
   ## For the report need to have pesudo code, describe the algorithms if we dont have both cuda and mpi implementations then we just either describe where we are stuck or try and explain why it may not be possible
