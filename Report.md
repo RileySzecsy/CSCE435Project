@@ -97,7 +97,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
         end for
      end ODD-EVEN PAR
 ```
-
+```
 - Radix Sort (MPI + CUDA)
   - MPI on each core
   - Pesudocode <br>
