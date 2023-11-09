@@ -18,7 +18,19 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   -  MPI on each core
   -  Pesudocode: <br>
   ```
-
+Where p = # processors and k = oversampling factor:
+1. Sample p (* k) elements and sort them
+2. Share these samples with every processor
+(MPI_Allgather)
+3. Each p select p-1 pivots aka splitters. These are
+the same across p’s.
+a. Each b-th pair of splitters denotes a “bucket” that
+will be sent to the b-th processor.
+4. Re-arrange local data into the buckets described
+by the pivots.
+5. Send the b-th bucket to the b-th processor
+(MPI_Alltoall[v])
+6. Combine buckets and sort local data.
 ```
 ```
 
