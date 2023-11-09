@@ -122,6 +122,7 @@ by the pivots.
 ## 3. Project implementation
 - Sample Sort:
 - Mergesort:
+  - MPI - MPI_Initialize(), MPI_Scatter(), MPI_Gather(), MPI_Finalize()
 - Odd-Even Transposition Sort:
   - MPI: MPI_Recv
   - Cuda: Explaination on why you cant do it or why its not possible
