@@ -8,11 +8,11 @@
 Group is communicating over groupme. 
 ---
 
-## 2. _due 10/25_ Project topic
+## 2. Project topic
 Comparing the performance of comparision based sorting algorithms. We will be scaling the GPU settings and change the number of threads and proccessors of the CPU based on problem size. We will be testing these on sorted, random, and reverse sorted inputs. 
 For Radix sort we will be comparing it directly to sample sort as we can only test integers. 
 
-## 2. _due 10/25_ Brief project description (what algorithms will you be comparing and on what architectures)
+### 2a. Brief project description (what algorithms will you be comparing and on what architectures)
 
 - Sample Sort (MPI + CUDA)
   -  MPI on each core
@@ -95,5 +95,24 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   ```
 
   ```
+### 2b. Pseudocode for each parallel algorithm
+- For MPI programs, include MPI calls you will use to coordinate between processes
+- For CUDA programs, indicate which computation will be performed in a CUDA kernel,
+  and where you will transfer data to/from GPU
+
+### 2c. Evaluation plan - what and how will you measure and compare
+- Input sizes, Input types
+- Strong scaling (same problem size, increase number of processors/nodes)
+- Weak scaling (increase problem size, increase number of processors)
+- Number of threads in a block on the GPU 
+
 
   ## For the report need to have pesudo code, describe the algorithms if we dont have both cuda and mpi implementations then we just either describe where we are stuck or try and explain why it may not be possible
+
+## 3. Project implementation
+- Sample Sort:
+- Mergesort:
+- Odd-Even Transposition Sort:
+- Radix Sort:
+
+
