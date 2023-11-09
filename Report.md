@@ -121,11 +121,15 @@ by the pivots.
 
 ## 3. Project implementation
 - Sample Sort:
+   - MPI - MPI_Init(), MPI_BCast(), MPI_Scatter(), MPI_Gather(), MPI_Finalize()
+   - Cuda -  Could not get it to compile since Grace is down.
 - Mergesort:
-  - MPI - MPI_Initialize(), MPI_Scatter(), MPI_Gather(), MPI_Finalize()
+  - MPI - MPI_Init(), MPI_Scatter(), MPI_Gather(), MPI_Barrier(), MPI_Finalize()
+  - Cuda - Still trying to figure out how to approach the Cuda implementation, and Grace is down which makes it harder to experiment
 - Odd-Even Transposition Sort:
-  - MPI: MPI_Recv
-  - Cuda: Explaination on why you cant do it or why its not possible
+  - MPI: MPI_Init(), MPI_Recv(), MPI_Bcast(), MPI_Scatter(), MPI_Sendrecv(), MPI_Finalize()
+  - Cuda: Stuck on figuring out how to make processes in the GPU communicate with eachother as data needs to be transferred between processes inside the GPU, and Grace is down which makes it harder to experiment
 - Radix Sort:
+  - MPI - MPI_Init(), MPI_Bcast(), MPI_Send(), MPI_Recv(), MPI_finalize()
 
 
