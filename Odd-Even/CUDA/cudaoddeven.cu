@@ -1,5 +1,8 @@
 #include<stdio.h>
 #include<cuda.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>    
 
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
@@ -69,9 +72,12 @@ int main(int argc, char *argv[])
     //d is device array
 
 
+
     int n = atoi(argv[1]);
     threads = atoi(argv[2]);
+    int input = atoi(argv[3]); //0 is sorted, 1 is random, 2 is reverse sorted, 3 is 1%pertubed 
     int c[n];
+
 
 
     int a[n]; 
@@ -81,10 +87,43 @@ int main(int argc, char *argv[])
     CALI_MARK_BEGIN("whole_computation");
 
     CALI_MARK_BEGIN("data_init");
-    srand(time(NULL));
-    for (int i = 0; i < n; i++) {
-        a[i] = rand()%upperlimit;
+
+
+    if(input == 0){
+        for(int i = 0; i<n; i++){
+            a[i] = i;
+        }
+
     }
+    else if(input == 1){
+        srand(time(NULL));
+        for (int i = 0; i < n; i++) {
+            a[i] = rand()%upperlimit;
+        }
+    }
+    else if(input == 2){
+        for(int i = 0; i<n; i++){
+            a[i] = n - i;
+        }
+    }
+    else{
+        std::srand(static_cast<unsigned>(std::time(0)));
+        // Fill the array with perturbed values
+        for (int i = 0; i < n; ++i) {
+            // Generate a random number between 0 and 1
+            double randomValue = static_cast<double>(rand()) / RAND_MAX;
+
+            // Check if the current element should be perturbed
+            if (randomValue < 0.01) { // 1% perturbation
+                // Perturb the value by adding a small random integer value
+                a[i] = static_cast<int>(rand() % 10); // You can adjust the perturbation range
+            } else {
+                // Assign a regular value
+                a[i] = i + 1; // You can replace this with any desired value assignment
+            }
+        }
+    }
+
     CALI_MARK_END("data_init");
 
     /*
@@ -148,6 +187,20 @@ int main(int argc, char *argv[])
 	cudaFree(d);
 
 
+    std::string input_string;
+    if(input == 0){
+        input_string = "Sorted";
+    }
+    else if(input == 1){
+        input_string = "Random";
+    }
+    else if(input == 2){
+        input_string = "ReverseSorted";
+    }
+    else{
+        input_string = "1%%pertubed";
+    }
+
     adiak::init(NULL);
     adiak::launchdate();    // launch date of the job
     adiak::libraries();     // Libraries used
@@ -158,7 +211,7 @@ int main(int argc, char *argv[])
     adiak::value("Datatype", "int"); // The datatype of input elements (e.g., double, int, float)
     adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
     adiak::value("InputSize", n); // The number of elements in input dataset (1000)
-    adiak::value("InputType", "Random"); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
+    adiak::value("InputType", input_string); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
     adiak::value("num_threads", threads); // The number of CUDA or OpenMP threads
     adiak::value("num_blocks", n/2); // The number of CUDA blocks 
     adiak::value("group_num", 9); // The number of your group (integer, e.g., 1, 10)

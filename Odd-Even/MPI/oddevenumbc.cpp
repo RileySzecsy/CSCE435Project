@@ -36,6 +36,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <mpi.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
@@ -48,12 +51,10 @@ const int RMAX = 100;
 //CALI Regions
 const char* whole_computation = "whole_computation"; 
 const char* data_init = "data_init"; 
-const char* comm_region = "comm_region";
-const char* comm_even_phase = "comm_even_phase";
-const char* comm_odd_phase = "comm_odd_phase";
-const char* comp_region = "comp_region";
-const char* comp_small = "comp_merge_low";
-const char* comp_large = "comp_merge_high";
+const char* comm = "comm";
+const char* comm_small = "comm_small";
+const char* comp = "comp";
+const char* comp_large = "comp_large";
 const char* check_correctness = "check_correctness";
 
 
@@ -62,16 +63,16 @@ void Usage(char* program);
 void Print_list(int local_A[], int local_n, int rank);
 void Merge_split_low(int local_A[], int temp_B[], int temp_C[], int local_n); //comp_small
 void Merge_split_high(int local_A[], int temp_B[], int temp_C[], int local_n); //comp_small
-void Generate_list(int local_A[], int local_n, int my_rank); //data_init
+void Generate_list(int local_A[], int local_n, int my_rank, int input_type); //data_init
 int  Compare(const void* a_p, const void* b_p); //Used as a comparitor in Sort
 
 /* Functions involving communication */
-void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p, char* gi_p, int my_rank, int p, MPI_Comm comm); //N/A
-void Sort(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm); //
-void Odd_even_iter(int local_A[], int temp_B[], int temp_C[], int local_n, int phase, int even_partner, int odd_partner, int my_rank, int p, MPI_Comm comm);
-void Print_local_lists(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm); //N/A
-void Print_global_list(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm); //N/A
-void Read_list(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm); //comm_large
+void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p, char* gi_p, int my_rank, int p, MPI_Comm comm_mpi); //N/A
+void Sort(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm_mpi); //
+void Odd_even_iter(int local_A[], int temp_B[], int temp_C[], int local_n, int phase, int even_partner, int odd_partner, int my_rank, int p, MPI_Comm comm_mpi);
+void Print_local_lists(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm_mpi); //N/A
+void Print_global_list(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm_mpi); //N/A
+void Read_list(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm_mpi); //comm_large
 
 
 /*-------------------------------------------------------------------*/
@@ -81,46 +82,65 @@ int main(int argc, char* argv[]) {
    int *local_A;
    int global_n;
    int local_n;
-   MPI_Comm comm;
+   MPI_Comm comm_mpi;
    double start, finish;
 
-   MPI_Init(&argc, &argv);
-   comm = MPI_COMM_WORLD;
-   MPI_Comm_size(comm, &p);
-   MPI_Comm_rank(comm, &my_rank);
+   int input_type = std::atoi(argv[3]);
+   //printf("input type: %d", input_type); 
 
-   Get_args(argc, argv, &global_n, &local_n, &g_i, my_rank, p, comm);
+   MPI_Init(&argc, &argv);
+   comm_mpi = MPI_COMM_WORLD;
+   MPI_Comm_size(comm_mpi, &p);
+   MPI_Comm_rank(comm_mpi, &my_rank);
+
+   Get_args(argc, argv, &global_n, &local_n, &g_i, my_rank, p, comm_mpi);
    local_A = (int*) malloc(local_n*sizeof(int));
    if (g_i == 'g') {
       CALI_MARK_BEGIN("data_init");
-      Generate_list(local_A, local_n, my_rank);
+      Generate_list(local_A, local_n, my_rank, input_type);
       CALI_MARK_END("data_init");
    } else {
-      Read_list(local_A, local_n, my_rank, p, comm);
+      Read_list(local_A, local_n, my_rank, p, comm_mpi);
    }
 //#  ifdef DEBUG
-   Print_local_lists(local_A, local_n, my_rank, p, comm);
+   Print_local_lists(local_A, local_n, my_rank, p, comm_mpi);
 //#  endif
 
    start = MPI_Wtime();
    //CALI_MARK_BEGIN("whole_computation");
-   Sort(local_A, local_n, my_rank, p, comm);
+   Sort(local_A, local_n, my_rank, p, comm_mpi);
    //CALI_MARK_END("whole_computation");
    finish = MPI_Wtime();
    if (my_rank == 0)
       printf("Elapsed time = %e seconds\n", finish-start);
 
 #  ifdef DEBUG
-   Print_local_lists(local_A, local_n, my_rank, p, comm);
+   Print_local_lists(local_A, local_n, my_rank, p, comm_mpi);
    fflush(stdout);
 #  endif
 
-   Print_global_list(local_A, local_n, my_rank, p, comm);
+   Print_global_list(local_A, local_n, my_rank, p, comm_mpi);
 
    free(local_A);
 
    MPI_Finalize();
    
+
+   std::string input_string; 
+
+   if(input_type == 0){
+      input_string = "Sorted";
+   }
+   else if(input_type == 1){
+      input_string = "Random";
+   }
+   else if(input_type == 2){
+      input_string = "ReverseSorted";
+   }
+   else{
+      input_string = "1%%perturbed";
+   }
+
 
    //adiak data
    adiak::init(NULL);
@@ -133,7 +153,7 @@ int main(int argc, char* argv[]) {
    adiak::value("Datatype", "int"); // The datatype of input elements (e.g., double, int, float)
    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
    adiak::value("InputSize", global_n); // The number of elements in input dataset (1000)
-   adiak::value("InputType", "Random"); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
+   adiak::value("InputType", input_string); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
    adiak::value("num_procs", p); // The number of processors (MPI ranks)
    adiak::value("group_num", 9); // The number of your group (integer, e.g., 1, 10)
    adiak::value("implementation_source", "Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
@@ -164,12 +184,43 @@ bool correctness_check(int A[], int n){
  * Input Args: local_n, my_rank
  * Output Arg: local_A
  */
-void Generate_list(int local_A[], int local_n, int my_rank) {
+void Generate_list(int local_A[], int local_n, int my_rank, int input_type) {
    int i;
+   if(input_type == 0){
+      for(i = 0; i<local_n; i++){
+         local_A[i] = i;
+      }
+   }
+   else if(input_type == 1){
+      srandom(my_rank+1);
+      for (i = 0; i < local_n; i++){
+         local_A[i] = random() % RMAX;
+      }
+   }
+   else if(input_type == 2){
+      for(i = 0; i<local_n; i++){
+         local_A[i] = local_n - i;
+      }
+   }
+   else{
+      std::srand(static_cast<unsigned>(std::time(0)));
+      // Fill the array with perturbed values
+      for (i = 0; i < local_n; ++i) {
+         // Generate a random number between 0 and 1
+         double randomValue = static_cast<double>(rand()) / RAND_MAX;
 
-    srandom(my_rank+1);
-    for (i = 0; i < local_n; i++)
-       local_A[i] = random() % RMAX;
+         // Check if the current element should be perturbed
+         if (randomValue < 0.01) { // 1% perturbation
+               // Perturb the value by adding a small random integer value
+               local_A[i] = static_cast<int>(rand() % 10); // You can adjust the perturbation range
+         } else {
+               // Assign a regular value
+               local_A[i] = i + 1; // You can replace this with any desired value assignment
+         }
+      }
+
+   }
+
 
 }  /* Generate_list */
 
@@ -199,20 +250,23 @@ void Usage(char* program) {
  * Output args: global_n_p, local_n_p, gi_p
  */
 void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p, 
-         char* gi_p, int my_rank, int p, MPI_Comm comm) {
+         char* gi_p, int my_rank, int p, MPI_Comm comm_mpi) {
 
    if (my_rank == 0) {
-      if (argc != 3) {
+      if (argc != 4) {
+         printf("stopped at 1 \n");
          Usage(argv[0]);
          *global_n_p = -1;  /* Bad args, quit */
       } else {
          *gi_p = argv[1][0];
          if (*gi_p != 'g' && *gi_p != 'i') {
+             printf("stopped at 2 \n");
             Usage(argv[0]);
             *global_n_p = -1;  /* Bad args, quit */
          } else {
             *global_n_p = strtol(argv[2], NULL, 10);
             if (*global_n_p % p != 0) {
+                printf("stopped at 3 \n");
                Usage(argv[0]);
                *global_n_p = -1;
             }
@@ -220,8 +274,8 @@ void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p,
       }
    }  /* my_rank == 0 */
 
-   MPI_Bcast(gi_p, 1, MPI_CHAR, 0, comm);
-   MPI_Bcast(global_n_p, 1, MPI_INT, 0, comm);
+   MPI_Bcast(gi_p, 1, MPI_CHAR, 0, comm_mpi);
+   MPI_Bcast(global_n_p, 1, MPI_INT, 0, comm_mpi);
 
    if (*global_n_p <= 0) {
       MPI_Finalize();
@@ -241,7 +295,7 @@ void Get_args(int argc, char* argv[], int* global_n_p, int* local_n_p,
  * Out arg:    local_A
  */
 void Read_list(int local_A[], int local_n, int my_rank, int p,
-         MPI_Comm comm) {
+         MPI_Comm comm_mpi) {
    int i;
    int *temp = NULL;
 
@@ -253,7 +307,7 @@ void Read_list(int local_A[], int local_n, int my_rank, int p,
    } 
 
    MPI_Scatter(temp, local_n, MPI_INT, local_A, local_n, MPI_INT,
-       0, comm);
+       0, comm_mpi);
 
    if (my_rank == 0)
       free(temp);
@@ -269,7 +323,7 @@ void Read_list(int local_A[], int local_n, int my_rank, int p,
  * Note:       Purely local, called only by process 0
  */
 void Print_global_list(int local_A[], int local_n, int my_rank, int p, 
-      MPI_Comm comm) {
+      MPI_Comm comm_mpi) {
    int* A = NULL;
    int i, n;
 
@@ -277,7 +331,7 @@ void Print_global_list(int local_A[], int local_n, int my_rank, int p,
       n = p*local_n;
       A = (int*) malloc(n*sizeof(int));
       MPI_Gather(local_A, local_n, MPI_INT, A, local_n, MPI_INT, 0,
-            comm);
+            comm_mpi);
       printf("Global list:\n");
       for (i = 0; i < n; i++)
          printf("%d ", A[i]);
@@ -292,7 +346,7 @@ void Print_global_list(int local_A[], int local_n, int my_rank, int p,
       free(A);
    } else {
       MPI_Gather(local_A, local_n, MPI_INT, A, local_n, MPI_INT, 0,
-            comm);
+            comm_mpi);
    }
 
 }  /* Print_global_list */
@@ -322,7 +376,7 @@ int Compare(const void* a_p, const void* b_p) {
  * In/out args: local_A 
  */
 void Sort(int local_A[], int local_n, int my_rank, 
-         int p, MPI_Comm comm) {
+         int p, MPI_Comm comm_mpi) {
    int phase;
    int *temp_B, *temp_C;
    int even_partner;  /* phase is even or left-looking */
@@ -348,7 +402,7 @@ void Sort(int local_A[], int local_n, int my_rank,
 
    for (phase = 0; phase < p; phase++)
       Odd_even_iter(local_A, temp_B, temp_C, local_n, phase, 
-             even_partner, odd_partner, my_rank, p, comm);
+             even_partner, odd_partner, my_rank, p, comm_mpi);
 
    free(temp_B);
    free(temp_C);
@@ -364,57 +418,52 @@ void Sort(int local_A[], int local_n, int my_rank,
  */
 void Odd_even_iter(int local_A[], int temp_B[], int temp_C[],
         int local_n, int phase, int even_partner, int odd_partner,
-        int my_rank, int p, MPI_Comm comm) {
+        int my_rank, int p, MPI_Comm comm_mpi) {
    MPI_Status status;
 
    if (phase % 2 == 0) {  /* Even phase, odd process <-> rank-1 */
       if (even_partner >= 0) {
         
-         CALI_MARK_BEGIN("comm_region");
-         CALI_MARK_BEGIN("comm_even_phase");
+         CALI_MARK_BEGIN("comm");
+         CALI_MARK_BEGIN("comm_small");
          MPI_Sendrecv(local_A, local_n, MPI_INT, even_partner, 0, 
-            temp_B, local_n, MPI_INT, even_partner, 0, comm,
+            temp_B, local_n, MPI_INT, even_partner, 0, comm_mpi,
             &status);
-         CALI_MARK_END("comm_even_phase");
-         CALI_MARK_END("comm_region");
+         CALI_MARK_END("comm_small");
+         CALI_MARK_END("comm");
         
-         CALI_MARK_BEGIN("comp_region");
+         CALI_MARK_BEGIN("comp");
+         CALI_MARK_BEGIN("comp_large");
          if (my_rank % 2 != 0){
 
-            CALI_MARK_BEGIN("comp_merge_high");
             Merge_split_high(local_A, temp_B, temp_C, local_n);
-            CALI_MARK_END("comp_merge_high");
          }
          else{
-            CALI_MARK_BEGIN("comp_merge_low");
             Merge_split_low(local_A, temp_B, temp_C, local_n);
-            CALI_MARK_END("comp_merge_low");
          }
-         CALI_MARK_END("comp_region");
+         CALI_MARK_END("comp_large");
+         CALI_MARK_END("comp");
       }
    } else { /* Odd phase, odd process <-> rank+1 */
       if (odd_partner >= 0) {
-         CALI_MARK_BEGIN("comm_region");
-         CALI_MARK_BEGIN("comm_odd_phase");
+         CALI_MARK_BEGIN("comm");
+         CALI_MARK_BEGIN("comm_small");
          MPI_Sendrecv(local_A, local_n, MPI_INT, odd_partner, 0, 
-            temp_B, local_n, MPI_INT, odd_partner, 0, comm,
+            temp_B, local_n, MPI_INT, odd_partner, 0, comm_mpi,
             &status);
-         CALI_MARK_END("comm_odd_phase");
-         CALI_MARK_END("comm_region");
+         CALI_MARK_END("comm_small");
+         CALI_MARK_END("comm");
 
-         CALI_MARK_BEGIN("comp_region");
+         CALI_MARK_BEGIN("comp");
+         CALI_MARK_BEGIN("comp_large");
          if (my_rank % 2 != 0){
-            CALI_MARK_BEGIN("comp_merge_low");
             Merge_split_low(local_A, temp_B, temp_C, local_n);
-            CALI_MARK_END("comp_merge_low");
         }
          else{
-            CALI_MARK_BEGIN("comp_merge_high");
             Merge_split_high(local_A, temp_B, temp_C, local_n);
-            CALI_MARK_END("comp_merge_high");
          }
-
-         CALI_MARK_END("comp_region");
+         CALI_MARK_END("comp_large");
+         CALI_MARK_END("comp");
       }
    }
 }  /* Odd_even_iter */
@@ -499,7 +548,7 @@ void Print_list(int local_A[], int local_n, int rank) {
  *     elements
  */
 void Print_local_lists(int local_A[], int local_n, 
-         int my_rank, int p, MPI_Comm comm) {
+         int my_rank, int p, MPI_Comm comm_mpi) {
    int*       A;
    int        q;
    MPI_Status status;
@@ -508,11 +557,11 @@ void Print_local_lists(int local_A[], int local_n,
       A = (int*) malloc(local_n*sizeof(int));
       Print_list(local_A, local_n, my_rank);
       for (q = 1; q < p; q++) {
-         MPI_Recv(A, local_n, MPI_INT, q, 0, comm, &status);
+         MPI_Recv(A, local_n, MPI_INT, q, 0, comm_mpi, &status);
          Print_list(A, local_n, q);
       }
       free(A);
    } else {
-      MPI_Send(local_A, local_n, MPI_INT, 0, 0, comm);
+      MPI_Send(local_A, local_n, MPI_INT, 0, 0, comm_mpi);
    }
 }  /* Print_local_lists */

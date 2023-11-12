@@ -24,4 +24,4 @@ module load CMake/3.12.1
 
 CALI_CONFIG="spot(output=p${processes}-a${array_size}.cali, \
     time.variance)" \
-mpiexec -n 4 ./oddevenumbc g 16
+mpiexec -n 4 ./oddevenumbc g 16 0
