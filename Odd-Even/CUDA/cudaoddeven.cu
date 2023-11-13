@@ -33,17 +33,23 @@ const char* comp_large = "comp_large";
 int threads;
 
 
+/*
+oddeven completes one step of the odd or even phase
+    - Depending on the phases that determines who each block is partnering with
+    - in each if statement swapping the values if needed
+*/
+
 __global__ void oddeven(int* x,int I,int n)
 {
 	int id=blockIdx.x;
-	if(I==0 && ((id*2+1)< n)){
+	if(I==0 && ((id*2+1)< n)){ //even phase
 		if(x[id*2]>x[id*2+1]){
 			int X=x[id*2];
 			x[id*2]=x[id*2+1];
 			x[id*2+1]=X;
 		}
 	}
-	if(I==1 && ((id*2+2)< n)){
+	if(I==1 && ((id*2+2)< n)){ //odd phase
 		if(x[id*2+1]>x[id*2+2]){
 			int X=x[id*2+1];
 			x[id*2+1]=x[id*2+2];
@@ -52,7 +58,11 @@ __global__ void oddeven(int* x,int I,int n)
 	}
 }
 
-
+/*
+correctness_check determines if the array is sorted in least to greatest order
+    - returns false if any value in the array is out of place
+    - returns true if it has reached the end
+*/
 bool correctness_check(int A[], int n){
     for(int i = 0; i < n - 1; i++){
         if (A[i] > A[i+1]){
@@ -73,22 +83,21 @@ int main(int argc, char *argv[])
 
 
 
+    //Seetting up variables
     int n = atoi(argv[1]);
     threads = atoi(argv[2]);
     int input = atoi(argv[3]); //0 is sorted, 1 is random, 2 is reverse sorted, 3 is 1%pertubed 
     int c[n];
-
-
-
     int a[n]; 
 
-    const int upperlimit = 250;
+    const int upperlimit = 250; //setting upper limit on random values
 
     CALI_MARK_BEGIN("whole_computation");
 
     CALI_MARK_BEGIN("data_init");
 
 
+    //Determining what type of input is happening
     if(input == 0){
         for(int i = 0; i<n; i++){
             a[i] = i;
@@ -126,6 +135,9 @@ int main(int argc, char *argv[])
 
     CALI_MARK_END("data_init");
 
+
+
+
     /*
     printf("Orignial Array is:\t");
     for(int i = 0; i<n; i++){
@@ -135,9 +147,8 @@ int main(int argc, char *argv[])
     */
     
 
+    //Initalizing device array and communication
     int *d; 
-
-
 	cudaMalloc((void**)&d, n*sizeof(int));
 
     CALI_MARK_BEGIN("comm");
@@ -147,7 +158,7 @@ int main(int argc, char *argv[])
     CALI_MARK_END("comm");
 
     
-
+    //Performing the odd even sort
     CALI_MARK_BEGIN("comp");
     CALI_MARK_BEGIN("comp_large");
 	for(int i=0;i<n;i++){
@@ -159,17 +170,20 @@ int main(int argc, char *argv[])
     
 	//printf("\n");
 
+    //Copying the sorted device array to a new array c
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
 	cudaMemcpy(c,d,n*sizeof(int), cudaMemcpyDeviceToHost);
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
+    //Checking if c is sorted correctly
     bool cc = correctness_check(c,n);
 
     CALI_MARK_END("whole_computation");
 
 
+    //Printing sorted array and confirming correctness check
     printf("Sorted Array is:\t");
 	for(int i=0; i<n; i++)
 	{
@@ -187,6 +201,7 @@ int main(int argc, char *argv[])
 	cudaFree(d);
 
 
+    //Used for the adiak data
     std::string input_string;
     if(input == 0){
         input_string = "Sorted";

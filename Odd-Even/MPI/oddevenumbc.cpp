@@ -77,6 +77,8 @@ void Read_list(int local_A[], int local_n, int my_rank, int p, MPI_Comm comm_mpi
 
 /*-------------------------------------------------------------------*/
 int main(int argc, char* argv[]) {
+
+   //Initalizing variables
    int my_rank, p;
    char g_i;
    int *local_A;
@@ -85,21 +87,24 @@ int main(int argc, char* argv[]) {
    MPI_Comm comm_mpi;
    double start, finish;
 
+   //Determining input types
    int input_type = std::atoi(argv[3]);
    //printf("input type: %d", input_type); 
 
+   //Setting up MPI
    MPI_Init(&argc, &argv);
    comm_mpi = MPI_COMM_WORLD;
    MPI_Comm_size(comm_mpi, &p);
    MPI_Comm_rank(comm_mpi, &my_rank);
 
+   //Getting the arguments to determine to fill the variables initalized above
    Get_args(argc, argv, &global_n, &local_n, &g_i, my_rank, p, comm_mpi);
    local_A = (int*) malloc(local_n*sizeof(int));
    if (g_i == 'g') {
       CALI_MARK_BEGIN("data_init");
-      Generate_list(local_A, local_n, my_rank, input_type);
+      Generate_list(local_A, local_n, my_rank, input_type); //Generating input depending on what has been passesd in
       CALI_MARK_END("data_init");
-   } else {
+   } else { //this will never happen
       Read_list(local_A, local_n, my_rank, p, comm_mpi);
    }
 //#  ifdef DEBUG
@@ -108,7 +113,7 @@ int main(int argc, char* argv[]) {
 
    start = MPI_Wtime();
    //CALI_MARK_BEGIN("whole_computation");
-   Sort(local_A, local_n, my_rank, p, comm_mpi);
+   Sort(local_A, local_n, my_rank, p, comm_mpi); //Performing the sorting algorithm
    //CALI_MARK_END("whole_computation");
    finish = MPI_Wtime();
    if (my_rank == 0)
@@ -119,15 +124,16 @@ int main(int argc, char* argv[]) {
    fflush(stdout);
 #  endif
 
-   Print_global_list(local_A, local_n, my_rank, p, comm_mpi);
+   Print_global_list(local_A, local_n, my_rank, p, comm_mpi); //correctness check is performed before printing the lists inside here
 
    free(local_A);
 
    MPI_Finalize();
    
 
-   std::string input_string; 
 
+   //Used for the adiak data
+   std::string input_string; 
    if(input_type == 0){
       input_string = "Sorted";
    }
@@ -164,7 +170,11 @@ int main(int argc, char* argv[]) {
 }  /* main */
 
 
-
+/*
+correctness_check determines if the array is sorted in least to greatest order
+    - returns false if any value in the array is out of place
+    - returns true if it has reached the end
+*/
 bool correctness_check(int A[], int n){
     for(int i = 0; i < n - 1; i++){
         if (A[i] > A[i+1]){
@@ -337,7 +347,11 @@ void Print_global_list(int local_A[], int local_n, int my_rank, int p,
          printf("%d ", A[i]);
       printf("\n\n");
 
-      if(correctness_check(A,n) == true){
+
+      CALI_MARK_BEGIN("check_correctness");
+      bool cc = correctness_check(A,n);
+      CALI_MARK_END("check_correctness");
+      if(cc == true){
             printf("The array is sorted from least to greatest \n");
         }
         else{
