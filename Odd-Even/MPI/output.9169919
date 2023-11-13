@@ -1,9 +1,0 @@
-0: 83 86 77 15 
-1: 90 19 88 75 
-2: 46 85 68 40 
-3: 1 83 74 26 
-Elapsed time = 2.647880e-02 seconds
-Global list:
-1 15 19 26 40 46 68 74 75 77 83 83 85 86 88 90 
-
-The array is sorted from least to greatest 
