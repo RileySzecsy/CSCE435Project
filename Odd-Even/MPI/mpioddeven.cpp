@@ -13,8 +13,10 @@ const char* whole_computation = "whole_computation";
 const char* data_init = "data_init"; 
 const char* comm = "comm";
 const char* comm_large = "comm_large";
+const char* comm_small = "comm_small";
 const char* comp = "comp";
 const char* comp_large = "comp_large";
+const char* comp_small = "comp_small";
 const char* check_correctness = "check_correctness";
 
 
@@ -294,7 +296,11 @@ int main(int argc, char **argv) {
     MPI_Finalize();
 
     CALI_MARK_END("whole_computation");
-
+    
+    CALI_MARK_BEGIN("comm_small");
+    CALI_MARK_END("comm_small");
+    CALI_MARK_BEGIN("comp_small");
+    CALI_MARK_END("comp_small");
 
 
     //Used for the adiak data
