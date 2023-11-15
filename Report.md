@@ -163,4 +163,32 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   - MPI - MPI_Init(), MPI_Bcast(), MPI_Send(), MPI_Recv(), MPI_finalize()
   - Cuda - Integration for MPI took longer than expected. Did not get a chance to test with Cuda before the Grace maintainance.
 
-
+## 4. Performance Evaluation
+- Sample Sort:
+  - MPI -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+  - CUDA
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+- Mergesort:
+  - MPI -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+  - CUDA -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+- Odd-Even:
+  - MPI -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+  - CUDA -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+- Radix Sort:
+  - MPI -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree)
+  - CUDA -
+    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - (Thicket Tree) 
