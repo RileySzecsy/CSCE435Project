@@ -28,8 +28,8 @@ const char* comp = "comp";
 const char* comp_small = "comp_small";
 const char* comp_large = "comp_large";
 const char* comm = "comm";
-const char* comm_toDevice = "comm_scatter";
-const char* comm_toHost = "comm_gather";
+const char* comm_toDevice = "comm_toDevice";
+const char* comm_toHost = "comm_toHost";
 
 
 /*
