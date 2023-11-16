@@ -243,8 +243,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 - Radix Sort:
   - MPI -
     - I got the algorithm to scale, got a CALI file and produced thicket tree; more files will be produced in coming trials but did not have time with delays. Working on plotting more CALI files. Looking at the data frame inside of Jupyter the algorithm seems to scale normally.
-    - (Thicket Tree)
-      - Thicket Tree:
+    - Thicket Tree:
       ```
         1.000 comm_small
         1.000 comp_small
