@@ -192,7 +192,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
     - (Thicket Tree)
 - Odd-Even:
   - MPI -
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - Managed to get algorithm to scale, generated some CALI files and produced thicket tree. Working on plotting the CALI files. Looking at the data frame inside of Jupyter the algorithm seems to scale normally. 
     - Thicket Tree:
       ```
         1.000 comm_small
@@ -206,7 +206,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
         └─ 1.000 data_init
       ```
   - CUDA -
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting). 
+    - Managed to get algorithm to scale, generated some CALI files and produced thicket tree. Working on plotting the CALI files. Scaling for this CUDA as of now is somewhat unique as the blocks are always going to be array_size/2 as the block id determines which phase (either odd or even) gets completed. 
     - Thicket Tree:
       ```
       1.000 comm_small
