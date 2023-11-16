@@ -1,0 +1,2 @@
+[mpiexec@c771.cluster] HYDI_dmx_poll_wait_for_event (../../../../../src/pm/i_hydra/libhydra/demux/hydra_demux_poll.c:48): poll error (Bad address)
+[mpiexec@c771.cluster] main (../../../../../src/pm/i_hydra/mpiexec/mpiexec.c:2019): error waiting for event
