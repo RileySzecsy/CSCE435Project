@@ -1,0 +1,56 @@
+__rec=node,id=12,attr=10,data=64,parent=3
+__rec=node,id=13,attr=8,data=attribute.alias,parent=12
+__rec=node,id=14,attr=8,data=attribute.unit,parent=12
+__rec=node,id=45,attr=14,data=sec,parent=5
+__rec=node,id=46,attr=13,data=Min time/rank,parent=45
+__rec=node,id=47,attr=10,data=65,parent=46
+__rec=node,id=48,attr=8,data=min#inclusive#sum#time.duration,parent=47
+__rec=node,id=49,attr=13,data=Max time/rank,parent=45
+__rec=node,id=50,attr=10,data=65,parent=49
+__rec=node,id=51,attr=8,data=max#inclusive#sum#time.duration,parent=50
+__rec=node,id=52,attr=13,data=Avg time/rank,parent=45
+__rec=node,id=53,attr=10,data=65,parent=52
+__rec=node,id=54,attr=8,data=avg#inclusive#sum#time.duration,parent=53
+__rec=node,id=57,attr=10,data=193,parent=5
+__rec=node,id=58,attr=8,data=avg.sum#inclusive#sum#time.duration,parent=57
+__rec=node,id=55,attr=10,data=193,parent=2
+__rec=node,id=56,attr=8,data=avg.count#inclusive#sum#time.duration,parent=55
+__rec=node,id=59,attr=13,data=Total time,parent=45
+__rec=node,id=60,attr=10,data=65,parent=59
+__rec=node,id=61,attr=8,data=sum#inclusive#sum#time.duration,parent=60
+__rec=node,id=62,attr=13,data=Node order,parent=2
+__rec=node,id=63,attr=10,data=65,parent=62
+__rec=node,id=64,attr=8,data=min#min#aggregate.slot,parent=63
+__rec=node,id=15,attr=8,data=spot.channel,parent=12
+__rec=node,id=65,attr=15,data=regionprofile
+__rec=ctx,ref=65,attr=48=51=54=58=56=61=64,data=0.004737=0.004737=0.004737=0.004737=1=0.004737=0
+__rec=node,id=37,attr=10,data=276,parent=3
+__rec=node,id=38,attr=8,data=region,parent=37
+__rec=node,id=39,attr=38,data=
+__rec=ctx,ref=39=65,attr=48=51=54=58=56=61=64,data=0.000301=0.000301=0.000301=0.000301=1=0.000301=1
+__rec=node,id=40,attr=38,data=main,parent=39
+__rec=ctx,ref=40=65,attr=48=51=54=58=56=61=64,data=0.000174=0.000174=0.000174=0.000174=1=0.000174=2
+__rec=node,id=74,attr=10,data=512,parent=3
+__rec=node,id=80,attr=8,data=spot.channels,parent=74
+__rec=node,id=79,attr=8,data=spot.options,parent=74
+__rec=node,id=77,attr=10,data=512,parent=1
+__rec=node,id=78,attr=8,data=spot.format.version,parent=77
+__rec=node,id=76,attr=8,data=spot.timeseries.metrics,parent=74
+__rec=node,id=75,attr=8,data=spot.metrics,parent=74
+__rec=node,id=19,attr=10,data=1612,parent=3
+__rec=node,id=20,attr=8,data=cali.caliper.version,parent=19
+__rec=node,id=21,attr=20,data=2.11.0-dev
+__rec=node,id=81,attr=75,data=min#inclusive#sum#time.duration\,max#inclusive#sum#time.duration\,avg#inclusive#sum#time.duration\,sum#inclusive#sum#time.duration\,avg#iscale#cupti.activity.duration\,min#iscale#cupti.activity.duration\,max#iscale#cupti.activity.duration\,sum#iscale#cupti.activity.duration\,min#min#aggregate.slot,parent=21
+__rec=node,id=82,attr=76,data=,parent=81
+__rec=node,id=83,attr=78,data=2,parent=82
+__rec=node,id=84,attr=79,data=cuda.gputime\,node.order,parent=83
+__rec=node,id=85,attr=80,data=regionprofile,parent=84
+__rec=node,id=66,attr=8,data=spot:output,parent=19
+__rec=node,id=67,attr=8,data=spot:node.order,parent=19
+__rec=node,id=68,attr=8,data=spot:cuda.gputime,parent=19
+__rec=node,id=69,attr=8,data=cali.channel,parent=19
+__rec=node,id=70,attr=69,data=spot
+__rec=node,id=71,attr=68,data=true,parent=70
+__rec=node,id=72,attr=67,data=true,parent=71
+__rec=node,id=73,attr=66,data=t2-v10.cali,parent=72
+__rec=globals,ref=85=73
