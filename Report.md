@@ -152,10 +152,10 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ## 3. Project implementation
 - Sample Sort:
    - MPI - MPI_Init(), MPI_BCast(), MPI_Scatter(), MPI_Gather(), MPI_Finalize()
-   - Cuda -  Could not get it to compile since Grace is down.
+   - Cuda -  I beleive I finished the implementation but Grace has been running slow and will not run my jobs
 - Mergesort:
   - MPI - MPI_Init(), MPI_Scatter(), MPI_Gather(), MPI_Barrier(), MPI_Finalize()
-  - Cuda - Still trying to figure out how to approach the Cuda implementation, and Grace is down which makes it harder to experiment
+  - Cuda - Completed CUDA implementation
 - Odd-Even Transposition Sort:
   - MPI: MPI_Init(), MPI_Recv(), MPI_Bcast(), MPI_Scatter(), MPI_Sendrecv(), MPI_Finalize()
   - Cuda: Stuck on figuring out how to make processes in the GPU communicate with eachother as data needs to be transferred between processes inside the GPU, and Grace is down which makes it harder to experiment
@@ -166,11 +166,21 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ## 4. Performance Evaluation
 - Sample Sort:
   - MPI -
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
-    - (Thicket Tree)
+    - By running the algorithm with different input sizes and threads, I was able to observe the timing and scaling of the algorithm.
+    - Thicket Tree
+      ```
+      1.000 main
+      ├─ 1.000 comm
+      │  ├─ 1.000 comm_large
+      │  └─ 1.000 comm_small
+      ├─ 1.000 comp
+      │  └─ 1.000 comp_large
+      │     └─ 1.000 comp_small
+      └─ 1.000 data_init
+       ```
   - CUDA
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
-    - (Thicket Tree)
+    - Grace has paused my jobs and will not run them. I have over 5 queued jobs and all of them are waiting on Grace.
+    - Unable to prodice thicket tree because Grace is not running my jobs. They have been queued for over an hour
 - Mergesort:
   - MPI -
     - Tried running the algorithm with larger array sizes & threds to observe how it scales. Read it into thicket to see the thicket tree and data frames, currently working on the plotting aspect of things.  
