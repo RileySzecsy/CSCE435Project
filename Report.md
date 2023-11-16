@@ -173,7 +173,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
     - (Thicket Tree)
 - Mergesort:
   - MPI -
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - Tried running the algorithm with larger array sizes & threds to observe how it scales. Read it into thicket to see the thicket tree and data frames, currently working on the plotting aspect of things.  
     - Thicket Tree:
         ```
           1.000 main_region
@@ -188,7 +188,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
                └─ 1.000 data_init
         ```
   - CUDA -
-    - (Explaination how it scales just by looking at the numbers on jupyter, and how we are working on plotting)
+    - Implemented the cuda version of mergesort algorithm and ensured that it scales and works with larger array sizes and threads. Read it into thicket to see the thicket tree and data frames, currently working on the plotting aspect of things.  
     - Thicket Tree:
         ```
         1.000 main_region
