@@ -217,15 +217,18 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
     - Managed to get algorithm to scale, generated some CALI files and produced thicket tree. Working on plotting the CALI files. Looking at the data frame inside of Jupyter the algorithm seems to scale normally. 
     - Thicket Tree:
       ```
-        1.000 comm_small
-        1.000 comp_small
-        1.000 whole_computation
-        ├─ 1.000 check_correctness
-        ├─ 1.000 comm
-        │  └─ 1.000 comm_large
-        ├─ 1.000 comp
-        │  └─ 1.000 comp_large
-        └─ 1.000 data_init
+      1.000 main
+      └─ 1.000 whole_computation
+         ├─ 1.000 check_correctness
+         ├─ 1.000 comm
+         │  └─ 1.000 comm_large
+         │     ├─ 1.000 MPI_Gather
+         │     ├─ 1.000 MPI_Recv
+         │     ├─ 1.000 MPI_Scatter
+         │     └─ 1.000 MPI_Send
+         ├─ 1.000 comp
+         │  └─ 1.000 comp_large
+         └─ 1.000 data_init
       ```
   - CUDA -
     - Managed to get algorithm to scale, generated some CALI files and produced thicket tree. Working on plotting the CALI files. Scaling for this CUDA as of now is somewhat unique as the blocks are always going to be array_size/2 as the block id determines which phase (either odd or even) gets completed. 
