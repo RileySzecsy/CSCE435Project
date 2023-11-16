@@ -256,7 +256,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
         └─ 1.000 data_init
       ``` 
   - CUDA -
-    - I was able to produce the CUDA implementation to its fullest, got a ton of CALI files for testing purposes, produced a thicket tree as seen below and I am going to continue to test with more input sizes for data analysis.
+    - I was able to produce the CUDA implementation to its fullest, got a ton of CALI files for testing purposes, produced a thicket tree as seen below and I am going to continue to test with more input sizes for data analysis. Looking at the data frame inside of Jupyter the algorithm seems to scale normally.
     - Thicket Tree:
       ```
       1.000 comm_small
