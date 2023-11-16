@@ -246,11 +246,14 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
     - (Thicket Tree)
   - CUDA -
     - I was able to produce the CUDA implementation to its fullest, got a ton of CALI files for testing purposes, produced a thicket tree as seen below and I am going to continue to test with more input sizes for data analysis.
-    - 1.000 comm_small
-1.000 comp_small
-1.000 whole_computation
-├─ 1.000 comm
-│  └─ 1.000 comm_large
-├─ 1.000 comp
-│  └─ 1.000 comp_large
-└─ 1.000 data_init
+    - Thicket Tree:
+      ```
+      1.000 comm_small
+      1.000 comp_small
+      1.000 whole_computation
+      ├─ 1.000 comm
+      │  └─ 1.000 comm_large
+      ├─ 1.000 comp
+      │  └─ 1.000 comp_large
+      └─ 1.000 data_init
+      ```
