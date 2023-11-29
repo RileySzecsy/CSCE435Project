@@ -18,6 +18,7 @@ const char* comp = "comp";
 const char* comp_large = "comp_large";
 const char* comp_small = "comp_small";
 const char* check_correctness = "check_correctness";
+//const char* main = "main";
 
 
 /*
@@ -127,15 +128,21 @@ void MPI_Pairwise_Exchange(int localn, double *locala, int sendrank, int recvran
     if (rank == sendrank) {
         CALI_MARK_BEGIN("comm");
         CALI_MARK_BEGIN("comm_large");
+        CALI_MARK_BEGIN("MPI_Send");
         MPI_Send(locala, localn, MPI_DOUBLE, recvrank, mergetag, MPI_COMM_WORLD);
+        CALI_MARK_END("MPI_Send");
+        CALI_MARK_BEGIN("MPI_Recv");
         MPI_Recv(locala, localn, MPI_DOUBLE, recvrank, sortedtag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        CALI_MARK_END("MPI_Recv");
         CALI_MARK_END("comm_large");
         CALI_MARK_END("comm");
     } else {
 
         CALI_MARK_BEGIN("comm");
         CALI_MARK_BEGIN("comm_large");
+        CALI_MARK_BEGIN("MPI_Recv");
         MPI_Recv(remote, localn, MPI_DOUBLE, sendrank, mergetag, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        CALI_MARK_END("MPI_Recv");
         CALI_MARK_END("comm_large");
         CALI_MARK_END("comm");
         
@@ -153,7 +160,9 @@ void MPI_Pairwise_Exchange(int localn, double *locala, int sendrank, int recvran
         }
         CALI_MARK_BEGIN("comm");
         CALI_MARK_BEGIN("comm_large");
+        CALI_MARK_BEGIN("MPI_Send");
         MPI_Send(&(all[theirstart]), localn, MPI_DOUBLE, sendrank, sortedtag, MPI_COMM_WORLD);
+        CALI_MARK_END("MPI_Send");
         CALI_MARK_END("comm_large");
         CALI_MARK_END("comm");
         for (int i=mystart; i<mystart+localn; i++)
@@ -184,8 +193,13 @@ int MPI_OddEven_Sort(int n, double *a, int root, MPI_Comm comm)
 
 
 // scatter the array a to local_a
-    MPI_Scatter(a, n / size, MPI_DOUBLE, local_a, n / size, MPI_DOUBLE,
-        root, comm);
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("MPI_Scatter");
+    MPI_Scatter(a, n / size, MPI_DOUBLE, local_a, n / size, MPI_DOUBLE, root, comm);
+    CALI_MARK_END("MPI_Scatter");
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
 // sort local_a
 
 
@@ -216,8 +230,13 @@ int MPI_OddEven_Sort(int n, double *a, int root, MPI_Comm comm)
     //printstat(rank, i-1, "after", local_a, n/size);
 
 // gather local_a to a
-    MPI_Gather(local_a, n / size, MPI_DOUBLE, a, n / size, MPI_DOUBLE,
-           root, comm);
+    CALI_MARK_BEGIN("comm");
+    CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("MPI_Gather");
+    MPI_Gather(local_a, n / size, MPI_DOUBLE, a, n / size, MPI_DOUBLE, root, comm);
+    CALI_MARK_END("MPI_Gather");
+    CALI_MARK_END("comm_large");
+    CALI_MARK_END("comm");
 
     if (rank == root){
         //printstat(rank, i, " all done ", a, n);
@@ -238,9 +257,12 @@ int MPI_OddEven_Sort(int n, double *a, int root, MPI_Comm comm)
 
 int main(int argc, char **argv) {
 
+    CALI_MARK_BEGIN("main");
+
+
     MPI_Init(&argc, &argv);
 
-
+    //CALI_MARK_BEGIN("main");
     //initatlizing and getting the command line arguments
     int array_size = atoi(argv[1]);
     double a[array_size];
@@ -293,15 +315,7 @@ int main(int argc, char **argv) {
     //calling the actual odd_even sort on the array a
     MPI_OddEven_Sort(array_size, a, 0, MPI_COMM_WORLD);
 
-    MPI_Finalize();
-
     CALI_MARK_END("whole_computation");
-    
-    CALI_MARK_BEGIN("comm_small");
-    CALI_MARK_END("comm_small");
-    CALI_MARK_BEGIN("comp_small");
-    CALI_MARK_END("comp_small");
-
 
     //Used for the adiak data
    std::string input_string; 
@@ -319,22 +333,42 @@ int main(int argc, char **argv) {
    }
 
 
-   //adiak data
-   adiak::init(NULL);
-   adiak::launchdate();    // launch date of the job
-   adiak::libraries();     // Libraries used
-   adiak::cmdline();       // Command line used to launch the job
-   adiak::clustername();   // Name of the cluster
-   adiak::value("Algorithm", "Odd Even Transposition Sort"); // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-   adiak::value("ProgrammingModel", "MPI"); // e.g., "MPI", "CUDA", "MPIwithCUDA"
-   adiak::value("Datatype", "double"); // The datatype of input elements (e.g., double, int, float)
-   adiak::value("SizeOfDatatype", sizeof(double)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-   adiak::value("InputSize", array_size); // The number of elements in input dataset (1000)
-   adiak::value("InputType", input_string); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
-   adiak::value("num_procs", num_procsesses); // The number of processors (MPI ranks)
-   adiak::value("group_num", 9); // The number of your group (integer, e.g., 1, 10)
-   adiak::value("implementation_source", "Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
 
+    //adiak data
+   
+    adiak::init(NULL);
+    adiak::launchdate();    // launch date of the job
+    adiak::libraries();     // Libraries used
+    adiak::cmdline();       // Command line used to launch the job
+    adiak::clustername();   // Name of the cluster
+    adiak::value("Algorithm", "Odd Even Transposition Sort"); // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
+    adiak::value("ProgrammingModel", "MPI"); // e.g., "MPI", "CUDA", "MPIwithCUDA"
+    adiak::value("Datatype", "int"); // The datatype of input elements (e.g., double, int, float)
+    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
+    adiak::value("InputSize", array_size); // The number of elements in input dataset (1000)
+    adiak::value("InputType", input_string); // For sorting, this would be "Sorted", "ReverseSorted", "Random", "1%perturbed"
+    adiak::value("num_procs", num_procsesses); // The number of processors (MPI ranks)
+    //adiak::value("num_threads", num_threads); // The number of CUDA or OpenMP threads
+    //adiak::value("num_blocks", num_blocks); // The number of CUDA blocks 
+    adiak::value("group_num", 9); // The number of your group (integer, e.g., 1, 10)
+    adiak::value("implementation_source", "Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten").
+
+
+    MPI_Finalize();
+
+    
+
+    //CALI_MARK_END("main");
+    
+    CALI_MARK_BEGIN("comm_small");
+    CALI_MARK_END("comm_small");
+    CALI_MARK_BEGIN("comp_small");
+    CALI_MARK_END("comp_small");
+
+
+
+
+    CALI_MARK_END("main");
 
     return 0;
 }

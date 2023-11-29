@@ -29,6 +29,7 @@ const char* check_correctness = "check_correctness";
 const char* comp = "comp";
 const char* comp_large = "comp_large";
 const char* comp_small = "comp_small";
+//const char* main = "main";
 
 
 
@@ -83,7 +84,7 @@ int main(int argc, char *argv[])
     //n is number of elements in array
     //d is device array
 
-
+    CALI_MARK_BEGIN("main");
 
     //Seetting up variables
     int n = atoi(argv[1]);
@@ -155,7 +156,9 @@ int main(int argc, char *argv[])
 
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
 	cudaMemcpy(d,a,n*sizeof(int),cudaMemcpyHostToDevice);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
@@ -175,12 +178,16 @@ int main(int argc, char *argv[])
     //Copying the sorted device array to a new array c
     CALI_MARK_BEGIN("comm");
     CALI_MARK_BEGIN("comm_large");
+    CALI_MARK_BEGIN("cudaMemcpy");
 	cudaMemcpy(c,d,n*sizeof(int), cudaMemcpyDeviceToHost);
+    CALI_MARK_END("cudaMemcpy");
     CALI_MARK_END("comm_large");
     CALI_MARK_END("comm");
 
     //Checking if c is sorted correctly
+    CALI_MARK_BEGIN("check_correctness");
     bool cc = correctness_check(c,n);
+    CALI_MARK_END("check_correctness");
 
     CALI_MARK_END("whole_computation");
 
@@ -189,7 +196,7 @@ int main(int argc, char *argv[])
     printf("Sorted Array is:\t");
 	for(int i=0; i<n; i++)
 	{
-		printf("%d\t",c[i]);
+		//printf("%d\t",c[i]);
 	}
     printf("\n");
 
@@ -202,6 +209,7 @@ int main(int argc, char *argv[])
 
 	cudaFree(d);
 
+    //CALI_MARK_END("main");
 
     CALI_MARK_BEGIN("comm_small");
     CALI_MARK_END("comm_small");
@@ -242,7 +250,7 @@ int main(int argc, char *argv[])
 
 
 
-
+    CALI_MARK_END("main");
 
 
 	return 0;
