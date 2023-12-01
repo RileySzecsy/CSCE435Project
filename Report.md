@@ -276,16 +276,20 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 - Merge Sort:
   - MPI:
       - Strong Scaling: With constant problem size and increased number of processors we expected to see a better time. We also expected that there could be diminishing results due to communication overheads. This expectaion was validated with trend from our computation graph below for array size of 2^24. As we can see from the plot the general trend is that computaiton time goes down up to 128 threads and then it starts declining at lower rates possibly due to communication overhead.
+        
         ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Strong%20Scaling%20MPI%20%7C%20comp%20%7C%20Size%3A%3A%2016777216.png)
 
         For whole computation, from the graph below of array size 2^24, we can see that as the number of processes increases the overall time decreases upto 64 nodes, and then we start getting diminishing returns due to communication overhead.
+        
         ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Strong%20Scaling%20MPI%20%7C%20whole_computation%20%7C%20Size%3A%3A%2016777216.png)
         
       - Speedup: Since speedup shows us how much faster the algorithm runs on multiple processors compared to one, we were wxpecting to see a more linear or logarithmic graph. This expectation was also validated with the computation graph for array size 2^24 with sorted input type.
+        
         ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Speedup%20MPI%20%7C%20comp%20%7C%20Input%20Type%3A%3A%20Sorted.png)
 
         However, the the whole_computation graph shown did not speed up as expected due to inefficient data initialization methods which took a longer computation time for larger arrays and communication overhead.
-   ![Speedup of all array sizes with Sorted Input](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Speedup%20MPI%20%7C%20whole_computation%20%7C%20Input%20Type%3A%3A%20Sorted.png)
+        
+       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Speedup%20MPI%20%7C%20whole_computation%20%7C%20Input%20Type%3A%3A%20Sorted.png)
 
 
       -  Weak Scaling: when we increase both the problem size and threads proportionally we expected the runtimes to be relatively constant since it would be a constant load per processor.
