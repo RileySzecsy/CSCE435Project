@@ -269,3 +269,45 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
       │  └─ 1.000 comp_large
       └─ 1.000 data_init
       ```
+
+
+## Final Report (Plots images are within each implementations folders)
+- Sample Sort:
+  - MPI:
+      - comp_large:
+      - comm:
+      - main:
+  - CUDA:
+      - comp_large:
+      - comm:
+      - main:
+
+- Merge Sort:
+  - MPI:
+      - comp_large:
+      - comm:
+      - main:
+  - CUDA:
+      - comp_large:
+      - comm:
+      - main:
+ 
+- Odd-Even Sort:
+  - MPI:
+      - comp_large:
+      - comm:
+      - main:
+  - CUDA:
+      - comp_large:
+      - comm:
+      - main:
+ 
+- Radix Sort:
+  - MPI:
+      - comp_large:
+      - comm:
+      - main:
+  - CUDA:
+      - comp_large:
+      - comm:
+      - main:
