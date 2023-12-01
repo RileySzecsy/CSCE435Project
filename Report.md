@@ -271,7 +271,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
       ```
 
 
-## Final Report
+## Final Report (Plots images are within each implementations folders)
 - Sample Sort:
   - MPI:
       - comp_large:
