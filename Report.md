@@ -274,40 +274,26 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ## Final Report (Plots images are within each implementations folders)
 - Sample Sort:
   - MPI:
-      - comp_large:
-      - comm:
-      - main:
+
   - CUDA:
-      - comp_large:
-      - comm:
-      - main:
+
 
 - Merge Sort:
   - MPI:
-      - comp_large:
-      - comm:
-      - main:
+
   - CUDA:
-      - comp_large:
-      - comm:
-      - main:
+
  
 - Odd-Even Sort:
-  - MPI:
-      - comp_large:
-      - comm:
-      - main:
-  - CUDA:
-      - comp_large:
-      - comm:
-      - main:
+  - MPI: The MPI implementation of odd-even sort algorithm time is going down based on the number of processes when the array size is fixed which is expected which is shown by this [plot](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Strong%20Scaling%20MPI%20_%20comp_large%20_%20Size__%20268435456.png). However when looking at a [speedup graph](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Strong%20Scaling%20Speedup%20MPI%20_%20comp_large%20_%20Input%20Type__%20Sorted.png) for lower array sizes (2^16, 2^18, 2^20) the optimal number of processes is 64. This makes sense as these sizes of arrays may not need as many processes which could result in processes waiting which adds time. For bigger array sizes (2^22, 2^24, 2^26, 2^28) speedup is still happening even at 1024 processes which is reasonable as these array sizes have more work that needs to be done which can be leveraged by more processes. As for the whole_computation there are similar trends going on with the [strong scaling](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Strong%20Scaling%20MPI%20_%20whole_computation%20_%20Size__%20268435456.png) and [speedup](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Strong%20Scaling%20Speedup%20MPI%20_%20whole_computation%20_%20Input%20Type__%20Sorted.png) plot as the whole_computation region is dominated by comp/comp_large. The only thing different about the plots when looking at the whole computation is that there is a dip in the speedup graph for sizes 2^16 and 2^18 however this is most likely due to resource allocation when queuing jobs as those particular jobs may have been allocated nodes that were father apart causing the unusual dip. When looking at a [weak scaling graph](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Weak%20Scaling%20MPI%20_%20comp_large%20_%20Input%20Type__%20Sorted.png) that has similar results to the speedup graphs, for smaller array sizes (2^16, 2^18, 2^20) there is a valley at 64 processes which is the same as the optimal number of processes found in the speedup graph. For bigger arrays the scaling is slowly going down which also reflects what the speedup graph was showing. When looking at a [weak scaling graph](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/MPI/Plotting/Plots/Weak%20Scaling%20MPI%20_%20whole_computation%20_%20Input%20Type__%20Sorted.png) for the whole_computation the trends are almost identical, smaller array sizes (2^16, 2^18, 2^20) start to skew up a processes increase where bigger array sizes (2^22, 2^24, 2^26, 2^28) are basically flat across.  The same dip occurs which adds more evidence to that being a resource allocation anomaly rather than a problem with the algorithm.  
+
+  - CUDA: The CUDA implementation of odd-even sort does not scale well as evidenced by the [strong scaling plot](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/CUDA/Plotting/Plots/Strong%20Scaling%20CUDA%20_%20whole_computation%20_%20Size__%204194304.png), [speedup plot](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/CUDA/Plotting/Plots/Strong%20Scaling%20Speedup%20CUDA%20_%20comp%20_%20Input%20Type__%20Sorted.png). The reason I think this is due to the personal implementation of the algorithm. The number of blocks used in the kernel call is [InputSize/2](https://github.com/RileySzecsy/CSCE435Project/blob/f86db5e18009593409e3cb48610f0c976ebb7c78/Odd-Even/CUDA/cudaoddeven.cu#L170), it was originally attempted with n/threads number of blocks however the array would end up unsorted. InputSize/2 blocks is significantly more blocks than InputSize/threads which means more blocks are trying to access the same memory and resources which could be the reason for the poor scaling in the CUDA implementation of odd-even sort. When looking at the [weak scaling plot](https://github.com/RileySzecsy/CSCE435Project/blob/master/Odd-Even/CUDA/Plotting/Plots/Weak%20Scaling%20CUDA%20_%20whole_computation%20_%20Input%20Type__%20Sorted.png) the trends are consistent and as shown by the almost horizontal lines however these plots do not give very much insight as to why there is poor scaling.
+ 
+  The plots linked in the report are the ones that  clearly and concisely represent the algorithm's behavior. If more context is wanted or needed all of the [MPI](https://github.com/RileySzecsy/CSCE435Project/tree/master/Odd-Even/MPI/Plotting/Plots) and [CUDA](https://github.com/RileySzecsy/CSCE435Project/tree/master/Odd-Even/CUDA/Plotting/Plots) odd-even plots are located within the repo. 
+
  
 - Radix Sort:
   - MPI:
-      - comp_large:
-      - comm:
-      - main:
+
   - CUDA:
-      - comp_large:
-      - comm:
-      - main:
+
