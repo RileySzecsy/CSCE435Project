@@ -327,16 +327,16 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   - CUDA:
       - Strong Scaling: as more GPUs are utilized we expected to see less computation time for strong scaling. As we can see from the first graph below, the large computation graph for 2^20 array size did not have less time as the number of processors increases. The main function region for array size of 2^22 in the second plot below also didn't exhibit less runtime with increases number of processors. This is probably due to algorithm implementation errors, memory bandwith limitaions, and communication overheads.
         
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_StrongScaling_%22comp_large%22_2%5E20_elements.png)
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_StrongScaling_%22main%22_2%5E22_elements.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_StrongScaling_comp_large_2%5E20_elements.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_StrongScaling_main_2%5E22_elements.png)
 
     - Weak Scaling: With proportional increase of array size and processors, we expected to see a nearly constant runtime plot. Both graphs below exhibit the expected trends since the load per processor is constant when both array size and processors are increased proportionally. The first graph below is the weak scaling for comp_large for all array sizes with sorted input type. The second graph below is the weak scaling plot for main for all array sizes with sorted input type.
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_WeakScaling_%22comp_large%22_Sorted%22_InputType.png)
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_WeakScaling_%22main%22_Sorted%22_InputType.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_WeakScaling_comp_large_Sorted_InputType.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_WeakScaling_main_Sorted_InputType.png)
       
     - Speedup: we expected to see a more linear or logarithmic trend showing faster runtimes with more processors. For comp_large in the first plot below, it did scale for the biggest array size but stayed relatively constant and even lower with increased number of processors. For main plot in the second plot below it mostly stayed relatively constant and even lower for some with increase processors. The reason why it is not scaling as expected shows me that there could have been inefficiencies in the implementation of mergesort cuda algorithm, data generation, and communication overheads.
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_%22comp_large%22_Sorted%22_InputType.png)
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_%22main%22_Sorted%22_InputType.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_comp_large_Sorted_InputType.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_main_Sorted_InputType.png)
 
       **Some of the plot here are selected as they show the algorithms behavior in both MPI and CUDA implementation. All the other 190+ plots for each implementation are found here in this repo. [MPI_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/MPI/Plotting/MPI_plots) and [CUDA_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/CUDA/Plotting/CUDA_plots)**
     
