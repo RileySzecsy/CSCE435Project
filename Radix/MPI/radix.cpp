@@ -1,26 +1,32 @@
-/*
-
-Jonathan Kutsch
-
-Radix Sort implemented with the help of the following resources:
-    https://www.geeksforgeeks.org/radix-sort/
-    https://researchwith.njit.edu/en/publications/partitioned-parallel-radix-sort
-    https://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.79.4515&rep=rep1&type=pdf
-    https://andreask.cs.illinois.edu/Teaching/HPCFall2012/Projects/yourii-report.pdf
-
- */
- 
- 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <mpi.h>
-#include <stdbool.h>
 #include <caliper/cali.h>
 #include <caliper/cali-manager.h>
 #include <adiak.hpp>
 
-// Function to get the largest element from an array
+const char* whole_computation = "whole_computation";
+const char* data_init = "data_init";
+const char* comm = "comm";
+const char* comm_large = "comm_large";
+const char* comp = "comp";
+const char* comp_large = "comp_large";
+const char* check_correctness = "check_correctness";
+const char* mpi_gather = "MPI_Gather";
+const char* mpi_recv = "MPI_Recv";
+const char* mpi_scatter = "MPI_Scatter";
+const char* mpi_send = "MPI_Send";
+
+bool isSorted(int arr[], int size) {
+    for (int i = 1; i < size; i++) {
+        if (arr[i] < arr[i - 1]) {
+            return false;
+        }
+    }
+    return true;
+}
+
 int getMax(int arr[], int n) {
     int max = arr[0];
     for (int i = 1; i < n; i++) {
@@ -31,212 +37,175 @@ int getMax(int arr[], int n) {
     return max;
 }
 
-// Using counting sort to sort the elements based on significant places
 void countingSort(int arr[], int n, int place) {
     const int max = 10;
-    int output[n];
-    int count[max];
+    int* output = new int[n]();
+    int* count = new int[max]();
 
-    // Initialize count array
-    for (int i = 0; i < max; ++i)
-        count[i] = 0;
+    CALI_MARK_BEGIN("comm_large");
 
-    CALI_MARK_BEGIN("counting_sort_small");  // New Caliper region for counting sort small computation
-
-    // Calculate the count of elements
     for (int i = 0; i < n; i++)
         count[(arr[i] / place) % 10]++;
 
-    // Calculate the cumulative count
     for (int i = 1; i < max; i++)
         count[i] += count[i - 1];
 
-    // Place the elements in sorted order
     for (int i = n - 1; i >= 0; i--) {
         output[count[(arr[i] / place) % 10] - 1] = arr[i];
         count[(arr[i] / place) % 10]--;
     }
 
-    // Copy the sorted elements back to the original array
     for (int i = 0; i < n; i++)
         arr[i] = output[i];
 
-    CALI_MARK_END("counting_sort_small");  // End of the Caliper region for counting sort small computation
+    CALI_MARK_END("comm_large");
+
+    delete[] output;
+    delete[] count;
 }
 
-// Radix Sort implementation
 void radixsort(int arr[], int n) {
-    CALI_MARK_BEGIN("radix_sort_whole_computation");  // New Caliper region for the whole radix sort computation
+    CALI_MARK_BEGIN("comp_large");
 
-    // Get the maximum element
     int max = getMax(arr, n);
 
-    // Apply counting sort to sort elements based on place value
     for (int place = 1; max / place > 0; place *= 10) {
-        CALI_MARK_BEGIN("radix_sort_counting_sort");  // Caliper region for counting sort within radix sort
         countingSort(arr, n, place);
-        CALI_MARK_END("radix_sort_counting_sort");
     }
 
-    CALI_MARK_END("radix_sort_whole_computation");  // End of the Caliper region for the whole radix sort computation
+    CALI_MARK_END("comp_large");
 }
 
-// Function to check if an array is sorted in ascending order
-bool isSorted(int arr[], int size) {
-    for (int i = 1; i < size; i++) {
-        if (arr[i] < arr[i - 1]) {
-            return false;
-        }
-    }
-    return true;
-}
-
-// Function to print an array
-void printArray(int arr[], int size) {
-    for (int i = 0; i < size; i++)
-        printf("%d ", arr[i]);
-    printf("\n");
-}
-
-int main(int argc, char* argv[]) {
-    int n = 1000; // Number of elements in the randomized array
-    int* arr;
-    
-    int my_rank, p;
-    char g_i;
-    MPI_Comm comm;
+int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
-    comm = MPI_COMM_WORLD;
-    MPI_Comm_size(comm, &p);
-    MPI_Comm_rank(comm, &my_rank);
 
-    double start_time, end_time; // Variables for recording time
+    CALI_MARK_BEGIN("main");
+
+    if (argc < 4) {
+        std::cerr << "Usage: " << argv[0] << " <array_size> <input_type> <num_processes>" << std::endl;
+        MPI_Abort(MPI_COMM_WORLD, 1);
+    }
+
+    int array_size = atoi(argv[1]);
+    int input_type = atoi(argv[2]);
+    int num_processes = atoi(argv[3]);
+    int upper_limit = 250;
+
+    CALI_MARK_BEGIN("whole_computation");
 
     CALI_MARK_BEGIN("data_init");
-    if (my_rank == 0) {
-        // Command line argument validation
-        if (argc != 3) {
-            fprintf(stderr, "usage: mpirun -np <p> %s <g|i> <global_n>\n", argv[0]);
-            fprintf(stderr, "   - p: the number of processes\n");
-            fprintf(stderr, "   - g: generate a random, distributed list\n");
-            fprintf(stderr, "   - i: user will input a list on process 0\n");
-            fprintf(stderr, "   - global_n: number of elements in the global list (must be evenly divisible by p)\n");
-            MPI_Finalize();
-            exit(EXIT_FAILURE);
-        }
 
-        // Parse command line arguments
-        g_i = argv[1][0];
-        if (g_i != 'g' && g_i != 'i') {
-            fprintf(stderr, "Invalid input source. Use 'g' for generating or 'i' for inputting the list.\n");
-            MPI_Finalize();
-            exit(EXIT_FAILURE);
+    int* a = new int[array_size]();
+
+    if (input_type == 0) {
+        for (int i = 0; i < array_size; i++) {
+            a[i] = i;
         }
-        n = strtol(argv[2], NULL, 10);
-        if (n % p != 0) {
-            fprintf(stderr, "Global number of elements must be evenly divisible by the number of processes.\n");
-            MPI_Finalize();
-            exit(EXIT_FAILURE);
+    } else if (input_type == 1) {
+        srand(time(NULL));
+        for (int i = 0; i < array_size; i++) {
+            a[i] = rand() % upper_limit;
+        }
+    } else if (input_type == 2) {
+        for (int i = 0; i < array_size; i++) {
+            a[i] = array_size - i;
+        }
+    } else {
+        std::srand(static_cast<unsigned>(std::time(0)));
+        for (int i = 0; i < array_size; ++i) {
+            double randomValue = static_cast<double>(rand()) / RAND_MAX;
+            if (randomValue < 0.01) {
+                a[i] = static_cast<int>(rand() % 10);
+            } else {
+                a[i] = i + 1;
+            }
         }
     }
 
-    // Broadcast command line arguments
-    MPI_Bcast(&g_i, 1, MPI_CHAR, 0, comm);
-    MPI_Bcast(&n, 1, MPI_INT, 0, comm);
-    int local_n = n / p;
+    CALI_MARK_END("data_init");
 
-    // Allocate memory for local array
-    arr = (int*)malloc(local_n * sizeof(int));
+    CALI_MARK_BEGIN("comp");
+
+    radixsort(a, array_size);
+
+    CALI_MARK_END("comp");
 
     CALI_MARK_BEGIN("comm");
-    // Initialize the initial array elements
-    if (g_i == 'g') {
-        for (int i = 0; i < local_n; i++) {
-            arr[i] = rand() % 1000; // Random values between 0 and 999
-        }
-    } else if (g_i == 'i') {
-        // User input on process 0
-        if (my_rank == 0) {
-            CALI_MARK_BEGIN("comm_large");
-            printf("Enter %d elements for process 0:\n", local_n);
-            for (int i = 0; i < local_n; i++) {
-                scanf("%d", &arr[i]);
-            }
-            // Distribute portions of the input to other processes
-            CALI_MARK_BEGIN("comm_small");
-            for (int i = 1; i < p; i++) {
-                MPI_Send(&arr[i * local_n], local_n, MPI_INT, i, 0, comm);
-            }
-            CALI_MARK_END("comm_small");
-            CALI_MARK_END("comm_large");
-        } else {
-            // Receive the portion of the input on other processes
-            MPI_Recv(arr, local_n, MPI_INT, 0, 0, comm, MPI_STATUS_IGNORE);
-        }
+
+    int* globalArr = nullptr;
+
+    if (num_processes > 1) {
+        globalArr = new int[array_size * num_processes]();
     }
+
+    MPI_Gather(a, array_size, MPI_INT, globalArr, array_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+    if (num_processes > 1) {
+        radixsort(globalArr, array_size * num_processes);
+    }
+
     CALI_MARK_END("comm");
 
-    // Print the initial array on process 0
-    if (my_rank == 0) {
-        printf("Initial array: \n");
-        printArray(arr, local_n);
-        printf("\n");
-    }
-
-    // Record the start time
-    start_time = MPI_Wtime();
-
-    {
-        CALI_MARK_BEGIN("radix_sort_main");  // New Caliper region for the main radix sort operation
-        radixsort(arr, local_n);
-        CALI_MARK_END("radix_sort_main");
-    }
-
-    // Record the end time
-    end_time = MPI_Wtime();
-
-    // Print the sorted array on process 0
-    if (my_rank == 0) {
-        printf("Sorted array: \n");
-        printArray(arr, local_n);
-        printf("\n");
-    }
-
-    // Check if the array is sorted in ascending order
-    bool sorted = isSorted(arr, local_n);
-
-    // Check if the array is sorted in ascending order on process 0
     CALI_MARK_BEGIN("check_correctness");
-    if (my_rank == 0) {
-        if (sorted) {
-            printf("The array is sorted from least to greatest\n");
-        } else {
-            printf("The array is not sorted from least to greatest\n");
-        }
 
-        printf("Elapsed time = %e seconds\n", end_time - start_time);
+    std::string input_string;
+    if (input_type == 0) {
+        input_string = "Sorted";
+    } else if (input_type == 1) {
+        input_string = "Random";
+    } else if (input_type == 2) {
+        input_string = "ReverseSorted";
+    } else {
+        input_string = "1%%perturbed";
     }
+
+    adiak::init(NULL);
+    adiak::launchdate();
+    adiak::libraries();
+    adiak::cmdline();
+    adiak::clustername();
+    adiak::value("Algorithm", "Radix Sort");
+    adiak::value("ProgrammingModel", "MPI");
+    adiak::value("Datatype", "int");
+    adiak::value("SizeOfDatatype", sizeof(int));
+    adiak::value("InputSize", array_size);
+    adiak::value("InputType", input_string);
+    adiak::value("num_procs", num_processes);
+    adiak::value("group_num", 9);
+    adiak::value("implementation_source", "Online");
+
     CALI_MARK_END("check_correctness");
 
-    // Free allocated memory and finalize MPI
-    free(arr);
+    if (num_processes > 1) {
+        int* resultArr = new int[array_size]();
+        MPI_Scatter(globalArr, array_size, MPI_INT, resultArr, array_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+        if (isSorted(resultArr, array_size)) {
+            printf("Array is sorted from least to greatest.\n");
+        } else {
+            printf("Array is not sorted.\n");
+        }
+
+        delete[] resultArr;
+    } else {
+        if (isSorted(a, array_size)) {
+            printf("Array is sorted from least to greatest.\n");
+        } else {
+            printf("Array is not sorted.\n");
+        }
+    }
+
+    if (num_processes > 1) {
+        delete[] globalArr;
+    }
+
+    delete[] a;
+    
+    CALI_MARK_END("whole_computation");
+
     MPI_Finalize();
 
-    // Adiak data
-    adiak::init(NULL);
-    adiak::launchdate();  // launch date of the job
-    adiak::libraries();   // Libraries used
-    adiak::cmdline();     // Command line used to launch the job
-    adiak::clustername(); // Name of the cluster
-    adiak::value("Algorithm", "Radix Sort"); // The name of the algorithm you are using (e.g., "MergeSort", "BitonicSort")
-    adiak::value("ProgrammingModel", "MPI"); // e.g., "MPI", "CUDA", "MPIwithCUDA"
-    adiak::value("Datatype", "int"); // The datatype of input elements (e.g., double, int, float)
-    adiak::value("SizeOfDatatype", sizeof(int)); // sizeof(datatype) of input elements in bytes (e.g., 1, 2, 4)
-    adiak::value("InputSize", n); // The number of elements in the input dataset
-    adiak::value("InputType", (g_i == 'g') ? "Random" : "UserInput"); // For sorting, this would be "Random", "Sorted", "ReverseSorted", "UserInput"
-    adiak::value("num_procs", p); // The number of processors (MPI ranks)
-    adiak::value("group_num", 9); // The number of your group (integer, e.g., 1, 10)
-    adiak::value("implementation_source", "Online"); // Where you got the source code of your algorithm; choices: ("Online", "AI", "Handwritten")
+    CALI_MARK_END("main");
 
     return 0;
 }

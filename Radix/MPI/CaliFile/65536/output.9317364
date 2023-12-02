@@ -1,5 +1,0 @@
-slurmstepd: error: poll(): Bad address
-slurmstepd: error: poll(): Bad address
-srun: error: c636: task 0: Broken pipe
-[mpiexec@c636.cluster] wait_proxies_to_terminate (../../../../../src/pm/i_hydra/mpiexec/intel/i_mpiexec.c:527): downstream from host c636 exited with status 141
-[mpiexec@c636.cluster] main (../../../../../src/pm/i_hydra/mpiexec/mpiexec.c:2096): assert (exitcodes != NULL) failed
