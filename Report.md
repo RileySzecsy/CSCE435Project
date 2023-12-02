@@ -319,7 +319,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_%22comp_large%22_Sorted%22_InputType.png)
       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/CUDA/Plotting/CUDA_plots/MergeSort_CUDA_Speedup_%22main%22_Sorted%22_InputType.png)
 
-Some of the plot here are selected as they show the algorithms behavior in both MPI and CUDA implementation. All the other 190+ plots for each implementation are found here in this repo. [MPI_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/MPI/Plotting/MPI_plots) and [CUDA_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/CUDA/Plotting/CUDA_plots)
+      **Some of the plot here are selected as they show the algorithms behavior in both MPI and CUDA implementation. All the other 190+ plots for each implementation are found here in this repo. [MPI_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/MPI/Plotting/MPI_plots) and [CUDA_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/CUDA/Plotting/CUDA_plots)**
     
 - Radix Sort:
   - MPI:
