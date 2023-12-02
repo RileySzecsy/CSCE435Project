@@ -346,22 +346,37 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 - Radix Sort:
   - MPI:
       - Strong Scaling: In my graphs, I notice an inverted correlation between computational runtime and processes. We expect to see a decrease in time as the number of processes increase, however, we see that the more workers there are, the more communication overhead present leading to issues with dividing up the work and aggregating the result back. The optimal number of processes in my case is when the time is the least with the smallest array sizes. When looking at the main portion of the sorting algorithm below, you can see that this trend is occuring due to the way that I designed the algorithm as well as in the comm graph that shows the amount of data being communicated leading to overhead. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Strong_Scaling_MPI_comp_large_Input_Type_ReverseSorted.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Strong_Scaling_MPI_main_Input_Type_ReverseSorted.png)
 
       
       - Speedup: When looking at the speedup graphs below, there is a gradual dip as the number of processes increase. Similar to the strong scaling above, this is due to how the number of processes are handled on a single core. As the workers increase, the communication overhead increases and spikes the speedup. It is clear that the optimal number of processes is at the lowest matrix size at 2^16, 2^18, and 2^20. As the matrix size increases, the overhead increases, and results in more processes waiting as they are hitting one core, effectively adding time and killing the speedup. Additionally, it is important to note the jump in speedup at 64 processes, which can be possible through a change in communicaiton overhead, resource allocation, and the varied nodes in each computation. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Strong_Scaling_Speedup_MPI_comp_large_Input_Type_ReverseSorted.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Strong_Scaling_Speedup_MPI_main_Input_Type_ReverseSorted.png)
 
         
       - Weak Scaling: In a weak scaling plot, we anticipate a steady level as both the array size and the number of processes increase, signifying a uniform load per process. As seen in the graphs below, this is acurately the case for radix sort. Similar to the speeedup graphs where we seed a change at 64 processes, we see a sharp dip in time as it changes from 32 to 64 processes. This is important as 64 processes represent the optimal configuration for the fastest computation. Lastly, we see in the graph below that it is consistently flat across the board for all array sizes and input types. This holds true for all array sizes and input types as it does in the speedup graph. With this dip, I see that there are issues with my algorithm and the way I allocated the resources for each computation. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Weak_Scaling_MPI_whole_computation_Input_Type_Random.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Weak_Scaling_MPI_comm_Input_Type_Random.png)
 
 
   - CUDA:
       - Strong Scaling: The radix sorting algorithm did not scale well in the CUDA implementation as seen in the strong scaling plots below. I attribute this limitation to the algorithm's construction and the associated communication overhead. In the Jupyter code, the number of blocks used was set to InputSize/2. Originally, it was executed with n/threads number of blocks, resulting in the initial array not being sorted correctly after compilation. The choice of InputSize/2 blocks represents a significantly higher number than n/threads, causing more blocks to contend for the same memory and resources, which I think ultimately leads to the poor scaling of the radix sorting algorithm in the CUDA implementation. Additionally, the algorithm's scalability was constrained, with the sort only accommodating array sizes up to 4194304, unable to handle sizes greater than 2^22. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Strong_Scaling_CUDA_comp_large_Size_1048576.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Strong_Scaling_CUDA_comm_Size_1048576.png)
       
 
       - Speedup: Due to the suboptimal implementation and the limited scalability of the radix sort, any anticipated speedup is essentially non-existent as seen below by the plotted data. As I described in the strong scaling above, this lack of improvement is likely attributed to the excessively high number of blocks, leading to a battle for memory resources due to the large amount of access that is required. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Strong_Scaling_Speedup_CUDA_comp_large_Input_Type_Random.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Strong_Scaling_Speedup_CUDA_whole_computation_Input_Type_Random.png)
 
 
       - Weak Scaling: As mentioned before the load per thread should be the same as both array size and thread amount increases. This is reflected in the radix weak scaling plot. We can see that there is a marginal uptick at 2^22 array size, but it is unclear as to why it is scaling poorly. Upon further analyzing the algorithm, it could be possible to sort at larger array sizes and have a clearer picture of scaling. <br>
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Weak_Scaling_CUDA_comp_large_Input_Type_Random.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Weak_Scaling_CUDA_whole_computation_Input_Type_Random.png)
+
+
+      **Some of the plot here are selected as they show the algorithms behavior in both MPI and CUDA implementation. All the other 190+ plots for each implementation are found here in this repo. [MPI_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/Radix/MPI/Plotting/Plots) and [CUDA_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/Radix/CUDA/Plotting/Plots)**
 
 
 
