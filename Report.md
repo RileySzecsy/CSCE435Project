@@ -302,26 +302,26 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 - Merge Sort: - Nebiyou Ersabo
   - MPI:
       - Strong Scaling: With constant problem size and increased number of processors we expected to see a better time. We also expected that there could be diminishing results due to communication overheads. This expectaion was validated with trend from our computation graph below for array size of 2^24. As we can see from the plot the general trend is that computaiton time goes down up to 128 threads and then it starts declining at lower rates possibly due to communication overhead.
-        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Strong%20Scaling%20MPI%20%7C%20comp%20%7C%20Size%3A%3A%2016777216.png)
+        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/StrongScaling_MPI_comp_Size_16777216.png)
 
         For whole computation, from the graph below of array size 2^24, we can see that as the number of processes increases the overall time decreases upto 64 threads, and then we start getting diminishing returns due to communication overhead.
         
-        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Strong%20Scaling%20MPI%20%7C%20whole_computation%20%7C%20Size%3A%3A%2016777216.png)
+        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/StrongScaling_MPI_whole_computation_Size_16777216.png)
         
       - Speedup: Since speedup shows us how much faster the algorithm runs on multiple processors compared to one, we were wxpecting to see a more linear or logarithmic graph. This expectation was also validated with the computation graph for array size 2^24 with sorted input type.
         
-        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Speedup%20MPI%20%7C%20comp%20%7C%20Input%20Type%3A%3A%20Sorted.png)
+        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/Speedup_MPI_comp_InputType_Sorted.png)
 
-        However, the the whole_computation graph below for all array sizes with sorted input did not speed up as expected due to inefficient data initialization methods which took a longer computation time for larger arrays and communication overhead.
+        However, the the main graph below for all array sizes with sorted input did not speed up as expected due to inefficient data initialization methods which took a longer computation time for larger arrays and communication overhead.
         
-       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/Speedup%20MPI%20%7C%20whole_computation%20%7C%20Input%20Type%3A%3A%20Sorted.png)
+       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/Speedup_MPI_main_InputType_Sorted.png)
 
 
       -  Weak Scaling: when we increase both the problem size and threads proportionally we expected the runtimes to be relatively constant since it would be a constant load per processor. We observed the relatively constant trend towards higher processorts for computation graph of sorted input below, despite its initial decline.
-        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/WeakScaling%20MPI%20%7C%20comp%20%7C%20Input%20Type%3A%3A%20Sorted.png)
+        ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/WeakScaling_MPI_comp_InputType_Sorted.png)
 
-      For whole computation of sorted input Type, the constant expected trend only exist somewhere in the between 64 and 128 threads despite the inconsistent data points on left and right edges. The causes for those could be resource limitations and communication overheads due to larger array sizes as well.   
-    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_plots/WeakScaling%20MPI%20%7C%20main%20%7C%20Input%20Type%3A%3A%20Sorted.png)
+      For main part of sorted input Type, the constant expected trend only exist somewhere in the between 64 and 128 threads despite the inconsistent data points on left and right edges. The causes for those could be resource limitations and communication overheads due to larger array sizes as well.   
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/MergeSort/MPI/Plotting/MPI_Plots/WeakScaling_MPI_main_InputType_Sorted.png)
 
 
   - CUDA:
