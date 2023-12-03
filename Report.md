@@ -404,6 +404,11 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_comp_InputType__1.png)
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_main_InputType__1.png)
 
+- Weak Scaling for sample sort MPI was looked at by viewing the "main" and "comp_large" sections of 1% pertubed input of the algorithm. Weak scaling is supposed to see a constant time as the array size and processes increase. The graphs don't show a completely constant run time, but they are not seen with very large discrepency. My algorithm most likely does not communicate properly or efficiently, making the graphs not as constant as they should be.
+
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Weak_Scaling_MPI_comp_large_InputType__.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Weak_Scaling_MPI_main_InputType__.png)
+
   - CUDA:
 
 - **Comparison Plots**
