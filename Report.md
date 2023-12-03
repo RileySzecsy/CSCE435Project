@@ -423,8 +423,8 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
   - Weak Scaling for sample sort CUDA was very consistent with theory, as the array size increases with thread count also increasing, time remains very constant. As seen in the graphs the time maintained a very flat line with some up and down most likely related to hardware or network discrepencies. The weak scaling of sample sort on CUDA was performed very well by my algorithm, keeping the constant time. 
 
-![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Weak_Scaling_CUDA_main_InputType__1%%pertubed.png)
-![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Weak_Scaling_CUDA_comp_large_InputType__1%%pertubed.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Weak_Scaling_CUDA_main_InputType__1pertubed.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Weak_Scaling_CUDA_comp_large_InputType__1pertubed.png)
 
 - **Comparison Plots**
   - MPI (comm, comp_large, main) - comparing sorted input of array size 2^18
