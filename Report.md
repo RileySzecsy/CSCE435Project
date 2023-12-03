@@ -343,7 +343,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
       **Some of the plot here are selected as they show the algorithms behavior in both MPI and CUDA implementation. All the other 190+ plots for each implementation are found here in this repo. [MPI_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/MPI/Plotting/MPI_plots) and [CUDA_Plots](https://github.com/RileySzecsy/CSCE435Project/tree/master/MergeSort/CUDA/Plotting/CUDA_plots)**
     
-- Radix Sort:
+- Radix Sort: - Jonathan Kutsch
   - MPI:
       - Strong Scaling: In my graphs, I notice an inverted correlation between computational runtime and processes. We expect to see a decrease in time as the number of processes increase, however, we see that the more workers there are, the more communication overhead present leading to issues with dividing up the work and aggregating the result back. The optimal number of processes in my case is when the time is the least with the smallest array sizes. When looking at the main portion of the sorting algorithm below, you can see that this trend is occuring due to the way that I designed the algorithm as well as in the comm graph that shows the amount of data being communicated leading to overhead. <br>
       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/MPI/Plotting/Plots/Strong_Scaling_MPI_comp_large_Input_Type_ReverseSorted.png)
@@ -380,7 +380,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
 
 
-- Sample Sort:
+- Sample Sort: - Vincent Lobello
   - MPI:
 
   - CUDA:
