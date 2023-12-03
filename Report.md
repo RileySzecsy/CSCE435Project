@@ -372,7 +372,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
 
       - Weak Scaling: As mentioned before the load per thread should be the same as both array size and thread amount increases. This is reflected in the radix weak scaling plot. We can see that there is a marginal uptick at 2^22 array size, but it is unclear as to why it is scaling poorly. Upon further analyzing the algorithm, it could be possible to sort at larger array sizes and have a clearer picture of scaling. <br>
-      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Weak_Scaling_CUDA_comp_large_Input_Type_Random.png)
+      ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Weak_Scaling_CUDA_comm_Input_Type_Random.png)
       ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Radix/CUDA/Plotting/Plots/Weak_Scaling_CUDA_whole_computation_Input_Type_Random.png)
 
 
@@ -385,3 +385,21 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
   - CUDA:
 
+- **Comparison Plots**
+  - MPI (comm, comp_large, main) - comparing sorted input of array size 2^18
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/MPI/MPI_comm_Sorted.png)
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/MPI/MPI_compLarge_Sorted.png)
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/MPI/MPI_main_Sorted.png)
+
+    
+  - CUDA (comm, main, whole_comp) - comparing sorted input of array size of 2^16
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/CUDA/CUDA_comm_Large_sorted.png)
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/CUDA/CUDA_main_sorted.png)
+    
+    ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/CUDA/CUDA_whole_sorted.png)
+  
