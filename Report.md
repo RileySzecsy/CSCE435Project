@@ -394,7 +394,12 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
 - Sample Sort: - Vincent Lobello
   - MPI:
-Strong scaling for sample sort MPI was consistent with what was expected. With keeping array size 2^18 and increasing the number of processes, it is expected to see a decrease in time which is consistent with the "main" and "comp large" graphs below. Main does see a spike back up in time once the processes reach a certain point because of the overhead and communication being inefficient. My claim is supported by seeing the constant decrease in time in the "comp large" graph. Both graphs support the expected outcome of a strong scaling experiment.
+     - Strong scaling for sample sort MPI was consistent with what was expected. With keeping array size 2^18 and increasing the number of processes, it is expected to see a decrease in time which is consistent with the "main" and "comp large" graphs below. Main does see a spike back up in time once the processes reach a certain point because of the overhead and communication being inefficient. My claim is supported by seeing the constant decrease in time in the "comp large" graph. Both graphs support the expected outcome of a strong scaling experiment.
+
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_MPI_main_Size__262144.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_MPI_comp_large_Size__262144.png)
+
+    - Speedup for sample sort MPI was seen to increase as the number of processes increases. Looking at the 1% pertubed input, you can see that the peak speed up for "comp" was around 128 processes, and similarly for "main". The "main" graph has smaller array sizes decrease in speedup as processes increase because of the communication portion and overhead of the algorithm. The larger input sizes for "main" followed a similar trend as "comp", increasing in speedup as processes increased.
 
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_MPI_main_Size__262144.png)
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_MPI_comp_large_Size__262144.png)
