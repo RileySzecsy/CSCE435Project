@@ -387,6 +387,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
 ** - Comparison Plots **
   - MPI (comm, comp_large, main) - comparing sorted input of array size 2^18
+    
     ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/MPI/MPI_comm_Sorted.png)
     
     ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/MPI/MPI_compLarge_Sorted.png)
@@ -395,6 +396,7 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
     
   - CUDA (comm, main, whole_comp) - comparing sorted input of array size of 2^16
+    
     ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/CUDA/CUDA_comm_Large_sorted.png)
     
     ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/Comparison/CUDA/CUDA_main_sorted.png)
