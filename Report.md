@@ -410,6 +410,10 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Weak_Scaling_MPI_main_InputType__.png)
 
   - CUDA:
+    - Strong Scaling for sample sort CUDA saw a general decrease in time while increasing the threads ran on. The largest change in times was for input types random and reversed, seeing a decrease in time in "main" for both array sizes, 2^22 and 2^18. This is consistent with what is expected because as the thread count increses, the overhead decreases, increasing speed of the algorithm.
+   
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_CUDA_main_Size__4194304.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_CUDA_main_Size__262144.png)
 
 - **Comparison Plots**
   - MPI (comm, comp_large, main) - comparing sorted input of array size 2^18
