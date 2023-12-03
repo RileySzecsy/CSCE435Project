@@ -181,6 +181,18 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
   - CUDA
     - Grace has paused my jobs and will not run them. I have over 5 queued jobs and all of them are waiting on Grace.
     - Unable to prodice thicket tree because Grace is not running my jobs. They have been queued for over an hour
+    ```
+    1.000 main
+    ├─ 1.000 comm
+    │  ├─ 1.000 comm_large
+    │  │  └─ 1.000 cudaMemcpy
+    │  └─ 1.000 comm_small
+    ├─ 1.000 comp
+    │  ├─ 1.000 comp_large
+    │  └─ 1.000 comp_small
+    ├─ 1.000 correctness_check 
+    └─ 1.000 data_init
+    ```
 - Mergesort:
   - MPI -
     - Tried running the algorithm with larger array sizes & threds to observe how it scales. Read it into thicket to see the thicket tree and data frames, currently working on the plotting aspect of things.  
