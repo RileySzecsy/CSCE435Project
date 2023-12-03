@@ -401,8 +401,8 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 
 - Speedup for sample sort MPI was seen to increase as the number of processes increases. Looking at the 1% pertubed input, you can see that the peak speed up for "comp" was around 128 processes, and similarly for "main". The "main" graph has smaller array sizes decrease in speedup as processes increase because of the communication portion and overhead of the algorithm. The larger input sizes for "main" followed a similar trend as "comp", increasing in speedup as processes increased.
 
-![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_comp_InputType__1%.png)
-![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_main_InputType__1%.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_comp_InputType__1.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/MPI/MPIPlots/Strong_Scaling_Speedup_MPI_main_InputType__1.png)
 
   - CUDA:
 
