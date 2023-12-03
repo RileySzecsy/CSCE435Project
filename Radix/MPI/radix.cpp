@@ -1,3 +1,5 @@
+// Jonathan Kutsch
+
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
