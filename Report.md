@@ -415,6 +415,11 @@ For Radix sort we will be comparing it directly to sample sort as we can only te
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_CUDA_main_Size__4194304.png)
 ![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_CUDA_main_Size__262144.png)
 
+  - Speedup for sample sort CUDA was very conistsent with what was expected. The "main" and "comp" for input type reverse, saw increases in speedup as the threads increased. The speedup was most prominent in the larger array sizes, with the smallest array, 2^16, flattening out when reaching the highest thread counts. The larger inputs maintained a consistent speedup throughout the experiment.
+
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_Speedup_CUDA_main_InputType__ReverseSorted.png)
+![img](https://github.com/RileySzecsy/CSCE435Project/blob/master/SampleSort/CUDA/CudaPlots/Strong_Scaling_Speedup_CUDA_comp_InputType__ReverseSorted.png)
+
 - **Comparison Plots**
   - MPI (comm, comp_large, main) - comparing sorted input of array size 2^18
     
